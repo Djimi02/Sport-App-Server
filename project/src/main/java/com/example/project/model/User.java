@@ -1,5 +1,6 @@
 package com.example.project.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.example.project.model.member.Member;
@@ -42,6 +43,12 @@ public class User {
         this.userName = userName;
         this.email = email; 
         this.password = password;
+
+        initVars();
+    }
+
+    private void initVars() {
+        this.members = new ArrayList<>();
     }
 
 }
