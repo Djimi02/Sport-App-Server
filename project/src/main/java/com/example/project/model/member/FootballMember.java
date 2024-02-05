@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.example.project.model.Sports;
 import com.example.project.model.game.FootballGame;
-import com.example.project.model.game.Game;
 import com.example.project.model.group.FootballGroup;
 
 import jakarta.persistence.CascadeType;

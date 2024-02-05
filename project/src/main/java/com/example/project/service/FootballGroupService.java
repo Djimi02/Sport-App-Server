@@ -57,6 +57,10 @@ public class FootballGroupService {
         return footballGroup;
     }
 
+    
+    /* =================================================================================================================== */
+
+
     @Transactional
     public FootballGroup createAndAddMemberToGroup(Long groupID, String memberNickname) {
         Optional<FootballGroup> fmOPT = footballGroupRepository.findById(groupID);
@@ -70,9 +74,6 @@ public class FootballGroupService {
 
         return group;
     }
-
-
-    /* =================================================================================================================== */
 
     @Transactional
     public FootballGroup removeMemberFromGroup(Long groupID, FootballMember member) {
