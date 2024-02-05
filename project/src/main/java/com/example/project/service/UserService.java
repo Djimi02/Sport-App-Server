@@ -1,5 +1,7 @@
 package com.example.project.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import com.example.project.model.User;
@@ -18,5 +20,11 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    
+    public User getUser(Long userID) {
+        Optional<User> uOPT = userRepository.findById(userID);
+        if (uOPT.isEmpty()) {
+            throw new IllegalArgumentException("User with id = " + userID + " does not exist.");
+        }
+        return uOPT.get();
+    }
 }
