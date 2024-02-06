@@ -6,6 +6,7 @@ import java.util.List;
 import com.example.project.model.Sports;
 import com.example.project.model.game.FootballGame;
 import com.example.project.model.member.FootballMember;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -18,9 +19,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FootballGroup extends Group {
 
+    @JsonIgnoreProperties({"group"})
     @OneToMany(mappedBy="group", fetch = FetchType.EAGER)
     protected List<FootballGame> games;
 
+    @JsonIgnoreProperties({"group"})
     @OneToMany(mappedBy="group", fetch = FetchType.EAGER)
     protected List<FootballMember> members;
     

@@ -6,6 +6,7 @@ import com.example.project.model.Sports;
 import com.example.project.model.User;
 import com.example.project.model.game.Game;
 import com.example.project.model.group.Group;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -39,6 +40,7 @@ public abstract class Member {
     @Column(nullable = false)
     protected String nickname;
 
+    @JsonIgnoreProperties({"members"})
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name="user_id")
     protected User user;

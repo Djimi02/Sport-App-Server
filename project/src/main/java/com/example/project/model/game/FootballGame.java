@@ -7,6 +7,7 @@ import java.util.List;
 import com.example.project.model.Sports;
 import com.example.project.model.group.FootballGroup;
 import com.example.project.model.member.FootballMember;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -22,10 +23,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FootballGame extends Game {
 
+    @JsonIgnoreProperties({"games"})
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name="group_id", nullable = false)
     private FootballGroup group;
 
+    @JsonIgnoreProperties({"games"})
     @ManyToMany(mappedBy = "games")
     private List<FootballMember> members;
 

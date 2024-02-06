@@ -38,7 +38,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @JsonIgnore
+    @JsonIgnoreProperties({"user"})
     @OneToMany(mappedBy="user", fetch = FetchType.EAGER)
     private List<Member> members;
 

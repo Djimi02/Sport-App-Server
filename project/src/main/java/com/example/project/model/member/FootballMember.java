@@ -5,6 +5,7 @@ import java.util.List;
 import com.example.project.model.Sports;
 import com.example.project.model.game.FootballGame;
 import com.example.project.model.group.FootballGroup;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -22,10 +23,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FootballMember extends Member {
 
+    @JsonIgnoreProperties({"members"})
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name="group_id", nullable = false)
     private FootballGroup group;
 
+    @JsonIgnoreProperties({"members"})
     @ManyToMany
     @JoinTable(
         name = "football_games_played", 
