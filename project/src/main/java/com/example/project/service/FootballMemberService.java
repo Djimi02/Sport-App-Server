@@ -1,10 +1,12 @@
 package com.example.project.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.example.project.model.User;
+import com.example.project.model.game.FootballGame;
 import com.example.project.model.group.FootballGroup;
 import com.example.project.model.member.FootballMember;
 import com.example.project.repository.UserRepository;
@@ -77,5 +79,20 @@ public class FootballMemberService {
 
         return footballMember;
     }
+
+    // @Transactional
+    // public void deleteMember(Long memberID) {
+    //     Optional<FootballMember> fmOPT = footballMemberRepository.findById(memberID);
+    //     if (fmOPT.isEmpty()) {
+    //         throw new IllegalArgumentException("Member with id = " + memberID + " does not exist.");
+    //     }
+
+    //     List<FootballGame> games = fmOPT.get().getGames();
+    //     for (FootballGame footballGame : games) { // remove member reference from games
+    //         footballGame.removeMember(memberID);
+    //     }
+
+    //     footballMemberRepository.deleteById(memberID);
+    // }
     
 }

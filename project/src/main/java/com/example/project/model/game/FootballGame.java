@@ -13,6 +13,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
@@ -29,7 +30,11 @@ public class FootballGame extends Game {
     private FootballGroup group;
 
     @JsonIgnoreProperties({"games"})
-    @ManyToMany(mappedBy = "games")
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinTable(
+        name = "football_games_played", 
+        joinColumns = @JoinColumn(name = "game_id"), 
+        inverseJoinColumns = @JoinColumn(name = "member_id"))
     private List<FootballMember> members;
 
     /* FOOTBALL GAME STATS */
@@ -43,6 +48,24 @@ public class FootballGame extends Game {
 
     private void initVars() {
         this.members = new ArrayList<>();
+    }
+
+    public void addMember(FootballMember member) {
+        this.members.add(member);
+    }
+
+    public void removeMember(Long memberID) {
+        int memberToBeRemoved = -1;
+        for (int i = 0; i < this.members.size(); i++) {
+            if (this.members.get(i).getId() == memberID) {
+                memberToBeRemoved = i;
+                break;
+            }
+        }
+
+        if (memberToBeRemoved != -1) {
+            this.members.remove(memberToBeRemoved);
+        }
     }
 
 }

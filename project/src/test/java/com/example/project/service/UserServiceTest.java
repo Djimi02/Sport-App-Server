@@ -20,4 +20,10 @@ public class UserServiceTest {
         User user = new User(username, email, password);
         userService.saveUser(user);
     }
+
+    @Test
+    void testDeleteUser() {
+        Long userID = 1l;
+        userService.deleteUser(userID);
+    }
 }

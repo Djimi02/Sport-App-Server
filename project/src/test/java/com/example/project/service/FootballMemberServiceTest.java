@@ -30,4 +30,10 @@ public class FootballMemberServiceTest {
         Long id = 18l;
         footballMemberService.updateUser(id, userID);
     }
+
+    // @Test
+    // public void deleteMemberTest() {
+    //     Long id = 18l;
+    //     footballMemberService.deleteMember(id);
+    // }
 }

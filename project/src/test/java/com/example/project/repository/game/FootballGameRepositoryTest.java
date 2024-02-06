@@ -8,7 +8,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.example.project.model.game.FootballGame;
 import com.example.project.model.group.FootballGroup;
+import com.example.project.model.member.FootballMember;
 import com.example.project.repository.group.FootballGroupRepository;
+import com.example.project.repository.member.FootballMemberRepository;
 
 @SpringBootTest
 public class FootballGameRepositoryTest {
@@ -19,11 +21,22 @@ public class FootballGameRepositoryTest {
     @Autowired 
     private FootballGroupRepository footballGroupRepository;
 
+    @Autowired
+    private FootballMemberRepository footballMemberRepository;
+
     @Test
     public void saveFootballGameTest() {
-        String name = "football game";
         FootballGroup footballGroup = footballGroupRepository.findById(1l).get();
         FootballGame footballGame = new FootballGame(new Date(), footballGroup);
+        Long memberID = 18l;
+        FootballMember footballMember = footballMemberRepository.findById(memberID).get();
+        footballGame.addMember(footballMember);
         footballGameRepository.save(footballGame);
+    }
+
+    @Test
+    public void retrieveFootballGameTest() {
+        FootballGame footballGame = footballGameRepository.findById(1l).get();
+        System.out.println("NUM OF MEMBERS = " + footballGame.getMembers().size());
     }
 }

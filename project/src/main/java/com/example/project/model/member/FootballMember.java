@@ -12,7 +12,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
@@ -29,11 +28,7 @@ public class FootballMember extends Member {
     private FootballGroup group;
 
     @JsonIgnoreProperties({"members"})
-    @ManyToMany
-    @JoinTable(
-        name = "football_games_played", 
-        joinColumns = @JoinColumn(name = "member_id"), 
-        inverseJoinColumns = @JoinColumn(name = "game_id"))
+    @ManyToMany(mappedBy = "members", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private List<FootballGame> games;
     
     @Column(nullable = false)
