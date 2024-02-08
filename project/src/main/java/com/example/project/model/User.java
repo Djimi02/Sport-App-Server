@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.project.model.member.Member;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -38,6 +39,10 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Roles role;
+
     @JsonIgnoreProperties({"user"})
     @OneToMany(mappedBy="user", fetch = FetchType.EAGER)
     private List<Member> members;
@@ -52,6 +57,7 @@ public class User {
 
     private void initVars() {
         this.members = new ArrayList<>();
+        this.role = Roles.USER;
     }
 
 }

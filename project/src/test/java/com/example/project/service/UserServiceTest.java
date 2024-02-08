@@ -15,7 +15,7 @@ public class UserServiceTest {
     @Test
     void testSaveUser() {
         String username = "djimi";
-        String email = "@gmail.com";
+        String email = "@abv.com";
         String password = "pass";
         User user = new User(username, email, password);
         userService.saveUser(user);
@@ -25,5 +25,12 @@ public class UserServiceTest {
     void testDeleteUser() {
         Long userID = 1l;
         userService.deleteUser(userID);
+    }
+
+    @Test
+    void testFindUserByEmail() {
+        String email = "@abv.com";
+        User userByEmail = userService.findUserByEmail(email);
+        System.out.println("USER EMAIL = " + userByEmail.getEmail() + " USER ID = " + userByEmail.getId());
     }
 }

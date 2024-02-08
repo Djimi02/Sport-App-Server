@@ -32,6 +32,13 @@ public class UserService {
         return uOPT.get();
     }
 
+    public User findUserByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new IllegalArgumentException("User with email = " + email + " does not exist."));
+
+        return user;
+    }
+
     @Transactional
     public User updateUserName(Long userID, String newUserName) {
         Optional<User> uOPT = userRepository.findById(userID);
