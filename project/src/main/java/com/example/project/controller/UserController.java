@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.project.model.User;
-import com.example.project.service.UserService;
+import com.example.project.service.implementation.UserService;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @RestController

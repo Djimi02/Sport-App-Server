@@ -11,6 +11,7 @@ import com.example.project.model.group.FootballGroup;
 import com.example.project.model.member.FootballMember;
 import com.example.project.repository.UserRepository;
 import com.example.project.repository.member.FootballMemberRepository;
+import com.example.project.service.implementation.FootballGroupService;
 
 @SpringBootTest
 public class FootballGroupServiceTest {

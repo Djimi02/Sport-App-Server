@@ -1,19 +1,23 @@
-package com.example.project.service;
+package com.example.project.service.implementation;
 
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.example.project.model.User;
+import com.example.project.model.UserDetailsImpl;
 import com.example.project.model.member.Member;
 import com.example.project.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
 
 @Service
-public class UserService {
-    
+public class UserService implements UserDetailsService {
+
     private UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
@@ -34,7 +38,7 @@ public class UserService {
 
     public User findUserByEmail(String email) {
         User user = userRepository.findByEmail(email)
-            .orElseThrow(() -> new IllegalArgumentException("User with email = " + email + " does not exist."));
+                .orElseThrow(() -> new IllegalArgumentException("User with email = " + email + " does not exist."));
 
         return user;
     }
@@ -85,5 +89,10 @@ public class UserService {
         }
 
         userRepository.deleteById(userID);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return new UserDetailsImpl(findUserByEmail(username));
     }
 }
