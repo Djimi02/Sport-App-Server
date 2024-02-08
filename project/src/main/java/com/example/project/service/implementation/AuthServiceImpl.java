@@ -13,7 +13,10 @@ import com.example.project.response.JwtAuthenticationResponse;
 import com.example.project.service.AuthService;
 import com.example.project.service.JwtService;
 
+import lombok.AllArgsConstructor;
+
 @Service
+@AllArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
     private UserService userService;
