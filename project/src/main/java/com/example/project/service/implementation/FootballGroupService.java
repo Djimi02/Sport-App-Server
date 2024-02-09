@@ -1,7 +1,5 @@
 package com.example.project.service.implementation;
 
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 
 import com.example.project.model.User;
