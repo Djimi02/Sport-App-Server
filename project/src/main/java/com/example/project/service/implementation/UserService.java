@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.project.model.User;
@@ -19,14 +20,19 @@ public class UserService implements UserDetailsService {
 
     private UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    private BCryptPasswordEncoder passwordEncoder;
+
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User saveUser(User user) {
         try {
+            String encodedPass = passwordEncoder.encode(user.getPassword());
+            user.setPassword(encodedPass);
             return userRepository.save(user);
-        } catch (Exception e) {
+        } catch (Exception e) { // TODO: not correct exception handling fix later
             throw new IllegalArgumentException("User with this email already exists!");
         }
     }
