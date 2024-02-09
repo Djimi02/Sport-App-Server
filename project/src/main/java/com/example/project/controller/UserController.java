@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.project.model.User;
+import com.example.project.request.UpdateUserEmailRequest;
+import com.example.project.request.UpdateUserNameRequest;
+import com.example.project.request.UpdateUserPasswordRequest;
 import com.example.project.service.implementation.UserService;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @RestController
 @RequestMapping("/user/")
@@ -34,24 +36,18 @@ public class UserController {
     }
 
     @PutMapping("/update/name")
-    public User updateUserName(@RequestBody ObjectNode objectNode) {
-        Long userID = objectNode.get("userID").asLong();
-        String userName = objectNode.get("userName").asText();
-        return userService.updateUserName(userID, userName);
+    public User updateUserName(@RequestBody UpdateUserNameRequest request) {
+        return userService.updateUserName(request.getUserID(), request.getUserName());
     }
 
     @PutMapping("/update/email")
-    public User updateEmail(@RequestBody ObjectNode objectNode) {
-        Long userID = objectNode.get("userID").asLong();
-        String email = objectNode.get("email").asText();
-        return userService.updateEmail(userID, email);
+    public User updateEmail(@RequestBody UpdateUserEmailRequest request) {
+        return userService.updateEmail(request.getUserID(), request.getEmail());
     }
 
     @PutMapping("/update/password")
-    public User updatePassword(@RequestBody ObjectNode objectNode) {
-        Long userID = objectNode.get("userID").asLong();
-        String password = objectNode.get("password").asText();
-        return userService.updatePassword(userID, password);
+    public User updatePassword(@RequestBody UpdateUserPasswordRequest request) {
+        return userService.updatePassword(request.getUserID(), request.getPassword());
     }
 
     @DeleteMapping("/delete/{id}")
