@@ -37,21 +37,15 @@ public class FootballGroupService {
     }
 
     public FootballGroup findFootballGroup(Long groupID) {
-        Optional<FootballGroup> fgOPT = footballGroupRepository.findById(groupID);
-        if (fgOPT.isEmpty()) {
-            throw new IllegalArgumentException("Group with id = " + groupID + " does not exist!");
-        }
-        return fgOPT.get();
+        return  footballGroupRepository.findById(groupID)
+            .orElseThrow(() -> new IllegalArgumentException("Group with id = " + groupID + " does not exist!"));
     }
 
     @Transactional
     public FootballGroup updateFootballGroupName(Long groupID, String newName) {
-        Optional<FootballGroup> fgOPT = footballGroupRepository.findById(groupID);
-        if (fgOPT.isEmpty()) {
-            throw new IllegalArgumentException("Group with id = " + groupID + " does not exist!");
-        }
+        FootballGroup footballGroup = footballGroupRepository.findById(groupID)
+            .orElseThrow(() -> new IllegalArgumentException("Group with id = " + groupID + " does not exist!"));
 
-        FootballGroup footballGroup = fgOPT.get();
         footballGroup.setName(newName);
 
         return footballGroup;
@@ -63,25 +57,19 @@ public class FootballGroupService {
 
     @Transactional
     public FootballGroup createAndAddMemberToGroup(Long groupID, String memberNickname) {
-        Optional<FootballGroup> fmOPT = footballGroupRepository.findById(groupID);
-        if (fmOPT.isEmpty()) {
-            throw new IllegalArgumentException("Group with id = " + groupID + " does not exist!");
-        }
-        FootballGroup group = fmOPT.get();
-        FootballMember newMember = new FootballMember(memberNickname, group);
+        FootballGroup footballGroup = footballGroupRepository.findById(groupID)
+            .orElseThrow(() -> new IllegalArgumentException("Group with id = " + groupID + " does not exist!"));
+        FootballMember newMember = new FootballMember(memberNickname, footballGroup);
         newMember = footballMemberRepository.save(newMember);
-        group.addMember(newMember);
+        footballGroup.addMember(newMember);
 
-        return group;
+        return footballGroup;
     }
 
     @Transactional
     public FootballGroup removeMemberFromGroup(Long groupID, FootballMember member) {
-        Optional<FootballGroup> fmOPT = footballGroupRepository.findById(groupID);
-        if (fmOPT.isEmpty()) {
-            throw new IllegalArgumentException("Group with id = " + groupID + " does not exist!");
-        }
-        FootballGroup footballGroup = fmOPT.get();
+        FootballGroup footballGroup = footballGroupRepository.findById(groupID)
+            .orElseThrow(() -> new IllegalArgumentException("Group with id = " + groupID + " does not exist!"));
         footballGroup.removeMember(member);
 
         footballMemberRepository.deleteById(member.getId());
@@ -91,11 +79,8 @@ public class FootballGroupService {
 
     @Transactional
     public FootballGroup removeMemberFromGroup(Long groupID, Long memberID) {
-        Optional<FootballGroup> fmOPT = footballGroupRepository.findById(groupID);
-        if (fmOPT.isEmpty()) {
-            throw new IllegalArgumentException("Group with id = " + groupID + " does not exist!");
-        }
-        FootballGroup footballGroup = fmOPT.get();
+        FootballGroup footballGroup = footballGroupRepository.findById(groupID)
+            .orElseThrow(() -> new IllegalArgumentException("Group with id = " + groupID + " does not exist!"));
         footballGroup.removeMember(memberID);
         
         footballMemberRepository.deleteById(memberID);
