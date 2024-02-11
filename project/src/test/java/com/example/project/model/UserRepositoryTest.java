@@ -1,6 +1,7 @@
 package com.example.project.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,5 +29,11 @@ public class UserRepositoryTest {
         User user = userRepository.findById(1l).get();
         assertEquals(2, user.getMembers().size());
         System.out.println("SIZE = " + user.getMembers().size());
+    }
+
+    @Test
+    public void existsUserByEmailTest() {
+        String email = "masha3@gmail.com";
+        assertTrue(userRepository.existsUserByEmail(email));
     }
 }

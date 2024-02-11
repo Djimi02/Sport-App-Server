@@ -28,13 +28,12 @@ public class UserService implements UserDetailsService {
     }
 
     public User saveUser(User user) {
-        try {
-            String encodedPass = passwordEncoder.encode(user.getPassword());
-            user.setPassword(encodedPass);
-            return userRepository.save(user);
-        } catch (Exception e) { // TODO: not correct exception handling fix later
-            throw new IllegalArgumentException("User with this email already exists!");
+        if (userRepository.existsUserByEmail(user.getEmail())) {
+            throw new IllegalArgumentException("User with email = " + user.getEmail() + " already exists.");
         }
+        String encodedPass = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPass);
+        return userRepository.save(user);
     }
 
     public User getUser(Long userID) {

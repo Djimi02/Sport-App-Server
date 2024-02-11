@@ -1,5 +1,7 @@
 package com.example.project.service;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,6 +22,24 @@ public class UserServiceTest {
         String password = "pass";
         User user = new User(username, email, password);
         userService.saveUser(user);
+    }
+
+    @Test
+    void testSaveUserExceptionForRepeatingEmail() {
+        String username = "djimi";
+        String email = "masha3@gmail.com";
+        String password = "pass";
+        User user = new User(username, email, password);
+        try {
+            userService.saveUser(user);
+        } catch (IllegalArgumentException e) {
+            assertTrue(true);
+            return;
+        } catch (Exception e) {
+            assertTrue(false);
+            return;
+        }
+        assertTrue(false);
     }
 
     @Test
