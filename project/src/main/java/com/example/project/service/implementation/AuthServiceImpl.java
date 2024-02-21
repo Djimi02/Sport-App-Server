@@ -32,7 +32,7 @@ public class AuthServiceImpl implements AuthService {
 
         String jwt = jwtService.generateToken(new UserDetailsImpl(user));
         
-        return new JwtAuthenticationResponse(jwt);
+        return new JwtAuthenticationResponse(jwt, user);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class AuthServiceImpl implements AuthService {
 
         String jwt = jwtService.generateToken(new UserDetailsImpl(user));
         
-        return new JwtAuthenticationResponse(jwt);
+        return new JwtAuthenticationResponse(jwt, user);
     }
 
 }
