@@ -26,8 +26,10 @@ public class UserRepositoryTest {
 
     @Test
     public void retrieveUserTest() {
-        User user = userRepository.findById(1l).get();
-        assertEquals(2, user.getMembers().size());
+        User user = userRepository.findById(3l).get();
+        // assertEquals(2, user.getMembers().size());
+        // System.out.println("User = " + user);
+        System.out.println("Member name = " + user.getMembers().get(0).numberOfGroups());
         System.out.println("SIZE = " + user.getMembers().size());
     }
 

@@ -48,4 +48,6 @@ public abstract class Member {
         this.sport = sport;
     }
 
+    public abstract int numberOfGroups();
+
 }

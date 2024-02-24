@@ -14,8 +14,8 @@ public class FootballMemberServiceTest {
 
     @Test
     public void saveFootballMemberTest() {
-        String nickname = "jimi";
-        Long groupID = 2l;
+        String nickname = "jimi2";
+        Long groupID = 1l;
         footballMemberService.saveFootballMember(nickname, groupID);
     }
 
@@ -28,8 +28,8 @@ public class FootballMemberServiceTest {
 
     @Test
     public void updateUserTest() {
-        Long userID = 1l;
-        Long id = 18l;
+        Long userID = 3l;
+        Long id = 1l;
         footballMemberService.updateUser(id, userID);
     }
 

@@ -5,6 +5,7 @@ import java.util.List;
 import com.example.project.model.Sports;
 import com.example.project.model.game.FootballGame;
 import com.example.project.model.group.FootballGroup;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
@@ -43,5 +44,10 @@ public class FootballMember extends Member {
 
     private void initVars() {
         this.numOfGoalsScored = 0;
+    }
+
+    @Override
+    public int numberOfGroups() {
+        return 10;
     }
 }
