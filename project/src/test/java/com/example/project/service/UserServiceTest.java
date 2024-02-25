@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.example.project.model.User;
+import com.example.project.repository.UserRepository;
 import com.example.project.service.implementation.UserService;
 
 @SpringBootTest
@@ -14,6 +15,9 @@ public class UserServiceTest {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Test
     void testSaveUser() {
@@ -53,5 +57,12 @@ public class UserServiceTest {
         String email = "@abv.com";
         User userByEmail = userService.findUserByEmail(email);
         System.out.println("USER EMAIL = " + userByEmail.getEmail() + " USER ID = " + userByEmail.getId());
+    }
+
+    @Test
+    void testRetrieveUser() {
+        User user = userRepository.findById(3l).get();
+        System.out.println("MEMBERS COUNT = " + user.getMembers().size());
+        System.out.println("GROUP NAME = " + user.getMembers().get(0).getGroup().getName());
     }
 }

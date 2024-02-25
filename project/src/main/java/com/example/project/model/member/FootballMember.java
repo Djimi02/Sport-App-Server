@@ -23,10 +23,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FootballMember extends Member {
 
-    @JsonIgnoreProperties({"members"})
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinColumn(name="group_id", nullable = false)
-    private FootballGroup group;
+    // @JsonIgnoreProperties({"members"})
+    // @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    // @JoinColumn(name="group_id", nullable = false)
+    // private FootballGroup group;
 
     @JsonIgnoreProperties({"members"})
     @ManyToMany(mappedBy = "members", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)

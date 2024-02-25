@@ -19,11 +19,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FootballGroup extends Group {
 
-    @JsonIgnoreProperties({"group"})
+    @JsonIgnoreProperties({"group", "members"})
     @OneToMany(mappedBy="group", fetch = FetchType.EAGER)
     protected List<FootballGame> games;
 
-    @JsonIgnoreProperties({"group"})
+    @JsonIgnoreProperties({"group", "games", "user"})
     @OneToMany(mappedBy="group", fetch = FetchType.EAGER)
     protected List<FootballMember> members;
     
