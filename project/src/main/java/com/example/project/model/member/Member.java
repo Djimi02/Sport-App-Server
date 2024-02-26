@@ -49,11 +49,16 @@ public abstract class Member {
     @JoinColumn(name="group_id", nullable = false)
     protected Group group;
 
-    public Member(String nickname, Sports sport) {
+    @Column(nullable = false)
+    protected int totalWins;
+
+    @Column(nullable = false)
+    protected int totalGames;
+
+    public Member(String nickname, Sports sport, Group group) {
         this.nickname = nickname;
         this.sport = sport;
+        this.group = group;
     }
-
-    public abstract int numberOfGroups();
 
 }

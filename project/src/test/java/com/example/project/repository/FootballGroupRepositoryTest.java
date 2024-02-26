@@ -18,7 +18,7 @@ public class FootballGroupRepositoryTest {
 
     @Test
     public void saveFootballGroupTest() {
-        String name = "name";
+        String name = "mosoma";
         FootballGroup footballGroup = new FootballGroup(name);
         footballGroupRepository.save(footballGroup);
     }

@@ -36,18 +36,12 @@ public class FootballMember extends Member {
     private int numOfGoalsScored;
 
     public FootballMember(String nickname, FootballGroup group) {
-        super(nickname, Sports.FOOTBALL);
-        this.group = group;
+        super(nickname, Sports.FOOTBALL, group);
 
         initVars();
     }
 
     private void initVars() {
         this.numOfGoalsScored = 0;
-    }
-
-    @Override
-    public int numberOfGroups() {
-        return 10;
     }
 }

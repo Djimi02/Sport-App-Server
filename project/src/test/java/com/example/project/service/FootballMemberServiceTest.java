@@ -28,7 +28,7 @@ public class FootballMemberServiceTest {
 
     @Test
     public void updateUserTest() {
-        Long userID = 3l;
+        Long userID = 1l;
         Long id = 1l;
         footballMemberService.updateUser(id, userID);
     }
