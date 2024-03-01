@@ -33,15 +33,6 @@ public class FootballGroupServiceTest {
     }
 
     @Test
-    public void saveGroupTest2() {
-        String name = "Mosoma";
-        Long userID = 1l;
-        User user = userRepository.findById(userID).get();
-        FootballGroup footballGroup = new FootballGroup(name);
-        footballGroupService.saveFootballGroup(footballGroup, user);
-    }
-
-    @Test
     public void updateGroupNameTest() {
         Long id = 1l;
         footballGroupService.updateFootballGroupName(id, "mosoma2");

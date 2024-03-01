@@ -5,32 +5,38 @@ import org.springframework.stereotype.Service;
 import com.example.project.model.User;
 import com.example.project.model.group.FootballGroup;
 import com.example.project.model.member.FootballMember;
+import com.example.project.repository.UserRepository;
 import com.example.project.repository.group.FootballGroupRepository;
 import com.example.project.repository.member.FootballMemberRepository;
 
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 
 @Service
+@AllArgsConstructor
 public class FootballGroupService {
 
     private FootballGroupRepository footballGroupRepository;
     private FootballMemberRepository footballMemberRepository;
-
-    public FootballGroupService(FootballGroupRepository footballGroupRepository, FootballMemberRepository footballMemberRepository) {
-        this.footballGroupRepository = footballGroupRepository;
-        this.footballMemberRepository = footballMemberRepository;
-    }
+    private UserRepository userRepository;
 
     public FootballGroup saveFootballGroup(FootballGroup footballGroup) {
         return footballGroupRepository.save(footballGroup);
     }
 
-    public FootballGroup saveFootballGroup(FootballGroup footballGroup, User user) {
-        FootballGroup savedGroup = footballGroupRepository.save(footballGroup);
+    public FootballGroup saveFootballGroup(String name, Long userID) {
+        FootballGroup group = new FootballGroup(name);
+        FootballGroup savedGroup = footballGroupRepository.save(group);
+
+        User user = userRepository.findById(userID)
+            .orElseThrow(() -> new IllegalArgumentException("User with id= " + userID + " does not exist!"));
+
         FootballMember newMember = new FootballMember(user.getUserName(), savedGroup);
         newMember.setUser(user);
         newMember = footballMemberRepository.save(newMember);
+
         savedGroup.addMember(newMember);
+
         return savedGroup;
     }
 
