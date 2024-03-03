@@ -60,14 +60,13 @@ public class FootballGroupService {
 
 
     @Transactional
-    public FootballGroup createAndAddMemberToGroup(Long groupID, String memberNickname) {
+    public FootballMember createAndAddMemberToGroup(Long groupID, String memberNickname) {
         FootballGroup footballGroup = footballGroupRepository.findById(groupID)
             .orElseThrow(() -> new IllegalArgumentException("Group with id = " + groupID + " does not exist!"));
         FootballMember newMember = new FootballMember(memberNickname, footballGroup);
         newMember = footballMemberRepository.save(newMember);
-        footballGroup.addMember(newMember);
 
-        return footballGroup;
+        return newMember;
     }
 
     @Transactional
