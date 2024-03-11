@@ -3,6 +3,7 @@ package com.example.project.controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,6 +33,11 @@ public class FootballGroupController {
     @PostMapping("/add/member/{groupid}/{name}")
     public FootballMember createFootballMember(@PathVariable(name = "groupid") Long groupID, @PathVariable(name = "name") String memberName) {
         return footballGroupService.createAndAddMemberToGroup(groupID, memberName);
+    }
+
+    @PostMapping("/update/member")
+    public void updateFootballMemberStats(@RequestBody FootballMember member) {
+        footballGroupService.updateFootballMemberStats(member);
     }
 
 }

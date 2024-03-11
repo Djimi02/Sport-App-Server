@@ -91,4 +91,14 @@ public class FootballGroupService {
         return footballGroup;
     }
 
+    @Transactional
+    public void updateFootballMemberStats(FootballMember member) {
+        FootballMember dbMember = footballMemberRepository.findById(member.getId())
+            .orElseThrow(() -> new IllegalArgumentException(""));
+
+        dbMember.setGoals(member.getGoals());
+        dbMember.setAssists(member.getAssists());
+        dbMember.setSaves(member.getSaves());
+        dbMember.setFouls(member.getFouls());
+    }
 }
