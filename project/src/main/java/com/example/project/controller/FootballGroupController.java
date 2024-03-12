@@ -1,5 +1,7 @@
 package com.example.project.controller;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,8 +37,8 @@ public class FootballGroupController {
         return footballGroupService.createAndAddMemberToGroup(groupID, memberName);
     }
 
-    @PostMapping("/update/member")
-    public void updateFootballMemberStats(@RequestBody FootballMember member) {
+    @PostMapping("/update/members/list")
+    public void updateFootballMemberStats(@RequestBody List<FootballMember> member) {
         footballGroupService.updateFootballMemberStats(member);
     }
 

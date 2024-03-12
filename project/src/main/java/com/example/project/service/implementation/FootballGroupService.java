@@ -1,5 +1,7 @@
 package com.example.project.service.implementation;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.example.project.model.User;
@@ -92,13 +94,17 @@ public class FootballGroupService {
     }
 
     @Transactional
-    public void updateFootballMemberStats(FootballMember member) {
-        FootballMember dbMember = footballMemberRepository.findById(member.getId())
+    public void updateFootballMemberStats(List<FootballMember> members) {
+
+        for (FootballMember footballMember : members) {
+            FootballMember dbMember = footballMemberRepository.findById(footballMember.getId())
             .orElseThrow(() -> new IllegalArgumentException(""));
 
-        dbMember.setGoals(member.getGoals());
-        dbMember.setAssists(member.getAssists());
-        dbMember.setSaves(member.getSaves());
-        dbMember.setFouls(member.getFouls());
+            dbMember.setGoals(footballMember.getGoals());
+            dbMember.setAssists(footballMember.getAssists());
+            dbMember.setSaves(footballMember.getSaves());
+            dbMember.setFouls(footballMember.getFouls());
+        }
+        
     }
 }
