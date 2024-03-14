@@ -24,12 +24,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FootballGame extends Game {
 
-    @JsonIgnoreProperties({"games"})
+    @JsonIgnoreProperties({"games", "members"})
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name="group_id", nullable = false)
     private FootballGroup group;
 
-    @JsonIgnoreProperties({"games"})
+    @JsonIgnoreProperties({"games", "group"})
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(
         name = "football_games_played", 
