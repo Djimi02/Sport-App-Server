@@ -1,15 +1,18 @@
 package com.example.project.service.implementation;
 
-import java.util.List;
+import java.util.Date;
 
 import org.springframework.stereotype.Service;
 
 import com.example.project.model.User;
+import com.example.project.model.game.FootballGame;
 import com.example.project.model.group.FootballGroup;
 import com.example.project.model.member.FootballMember;
 import com.example.project.repository.UserRepository;
+import com.example.project.repository.game.FootballGameRepository;
 import com.example.project.repository.group.FootballGroupRepository;
 import com.example.project.repository.member.FootballMemberRepository;
+import com.example.project.request.AddNewFootballGameRequest;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -21,6 +24,7 @@ public class FootballGroupService {
     private FootballGroupRepository footballGroupRepository;
     private FootballMemberRepository footballMemberRepository;
     private UserRepository userRepository;
+    private FootballGameRepository footballGameRepository;
 
     public FootballGroup saveFootballGroup(FootballGroup footballGroup) {
         return footballGroupRepository.save(footballGroup);
@@ -67,6 +71,7 @@ public class FootballGroupService {
             .orElseThrow(() -> new IllegalArgumentException("Group with id = " + groupID + " does not exist!"));
         FootballMember newMember = new FootballMember(memberNickname, footballGroup);
         newMember = footballMemberRepository.save(newMember);
+        newMember.setGroup(null);
 
         return newMember;
     }
@@ -94,17 +99,34 @@ public class FootballGroupService {
     }
 
     @Transactional
-    public void updateFootballMemberStats(List<FootballMember> members) {
+    public void addNewGame(AddNewFootballGameRequest request) {
 
-        for (FootballMember footballMember : members) {
+        // Retrieve group
+        FootballGroup group = footballGroupRepository.findById(request.getGroupID())
+            .orElseThrow(() -> new IllegalArgumentException("Group with id = " + request.getGroupID() + " does not exist!"));
+
+        // Save game member stats
+        for (FootballMember member : request.getMembersGameStats()) {
+            member.setGroup(null);
+            member = footballMemberRepository.save(member);
+        }
+
+        // Create new game
+        FootballGame newGame = new FootballGame(new Date(), group);
+        newGame.setVictory(request.getVictory());
+        newGame.setMembers(request.getMembersGameStats());
+
+        footballGameRepository.save(newGame);
+
+        // Update group members with the new stats
+        for (FootballMember footballMember : request.getUpdatedMembers()) {
             FootballMember dbMember = footballMemberRepository.findById(footballMember.getId())
-            .orElseThrow(() -> new IllegalArgumentException(""));
+            .orElseThrow(() -> new IllegalArgumentException("Member with id = " + footballMember.getId() + " does not exists!"));
 
             dbMember.setGoals(footballMember.getGoals());
             dbMember.setAssists(footballMember.getAssists());
             dbMember.setSaves(footballMember.getSaves());
             dbMember.setFouls(footballMember.getFouls());
         }
-        
     }
 }

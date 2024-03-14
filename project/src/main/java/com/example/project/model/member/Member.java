@@ -46,7 +46,7 @@ public abstract class Member {
 
     @JsonIgnoreProperties({"members", "games"})
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinColumn(name="group_id", nullable = false)
+    @JoinColumn(name="group_id")
     protected Group group;
 
     public Member(String nickname, Sports sport, Group group) {

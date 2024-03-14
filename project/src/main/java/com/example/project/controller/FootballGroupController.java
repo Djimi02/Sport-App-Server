@@ -1,6 +1,5 @@
 package com.example.project.controller;
 
-import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.project.model.group.FootballGroup;
 import com.example.project.model.member.FootballMember;
+import com.example.project.request.AddNewFootballGameRequest;
 import com.example.project.service.implementation.FootballGroupService;
 
 import lombok.AllArgsConstructor;
@@ -37,9 +37,9 @@ public class FootballGroupController {
         return footballGroupService.createAndAddMemberToGroup(groupID, memberName);
     }
 
-    @PostMapping("/update/members/list")
-    public void updateFootballMemberStats(@RequestBody List<FootballMember> member) {
-        footballGroupService.updateFootballMemberStats(member);
+    @PostMapping("/add/game")
+    public void addNewGame(@RequestBody AddNewFootballGameRequest request) {
+        footballGroupService.addNewGame(request);
     }
 
 }

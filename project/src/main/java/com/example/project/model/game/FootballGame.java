@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 public class FootballGame extends Game {
 
     @JsonIgnoreProperties({"games"})
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name="group_id", nullable = false)
     private FootballGroup group;
 
@@ -37,7 +37,7 @@ public class FootballGame extends Game {
         inverseJoinColumns = @JoinColumn(name = "member_id"))
     private List<FootballMember> members;
 
-    /* FOOTBALL GAME STATS */
+    private Integer victory; // -1 -> team 1 won, 0 -> draw, 1 -> team 2 won
 
     public FootballGame(Date date, FootballGroup group) {
         super(date, Sports.FOOTBALL);
@@ -48,6 +48,7 @@ public class FootballGame extends Game {
 
     private void initVars() {
         this.members = new ArrayList<>();
+        this.victory = null;
     }
 
     public void addMember(FootballMember member) {
