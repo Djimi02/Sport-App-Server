@@ -1,7 +1,7 @@
 package com.example.project.model.game;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.example.project.model.Sports;
@@ -29,7 +29,7 @@ public class FootballGame extends Game {
     @JoinColumn(name="group_id", nullable = false)
     private FootballGroup group;
 
-    @JsonIgnoreProperties({"games", "group"})
+    @JsonIgnoreProperties({"group", "user"})
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(
         name = "football_games_played", 
@@ -39,7 +39,7 @@ public class FootballGame extends Game {
 
     private Integer victory; // -1 -> team 1 won, 0 -> draw, 1 -> team 2 won
 
-    public FootballGame(Date date, FootballGroup group) {
+    public FootballGame(LocalDate date, FootballGroup group) {
         super(date, Sports.FOOTBALL);
         this.group = group;
 

@@ -1,6 +1,7 @@
 package com.example.project.service.implementation;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.Calendar;
 
 import org.springframework.stereotype.Service;
 
@@ -35,7 +36,7 @@ public class FootballGroupService {
         FootballGroup savedGroup = footballGroupRepository.save(group);
 
         User user = userRepository.findById(userID)
-            .orElseThrow(() -> new IllegalArgumentException("User with id= " + userID + " does not exist!"));
+                .orElseThrow(() -> new IllegalArgumentException("User with id= " + userID + " does not exist!"));
 
         FootballMember newMember = new FootballMember(user.getUserName(), savedGroup);
         newMember.setUser(user);
@@ -47,31 +48,36 @@ public class FootballGroupService {
     }
 
     public FootballGroup findFootballGroup(Long groupID) {
-        return  footballGroupRepository.findById(groupID)
-            .orElseThrow(() -> new IllegalArgumentException("Group with id = " + groupID + " does not exist!"));
+        return footballGroupRepository.findById(groupID)
+                .orElseThrow(() -> new IllegalArgumentException("Group with id = " + groupID + " does not exist!"));
     }
 
     @Transactional
     public FootballGroup updateFootballGroupName(Long groupID, String newName) {
         FootballGroup footballGroup = footballGroupRepository.findById(groupID)
-            .orElseThrow(() -> new IllegalArgumentException("Group with id = " + groupID + " does not exist!"));
+                .orElseThrow(() -> new IllegalArgumentException("Group with id = " + groupID + " does not exist!"));
 
         footballGroup.setName(newName);
 
         return footballGroup;
     }
 
-    
-    /* =================================================================================================================== */
-
+    /*
+     * =============================================================================
+     * ======================================
+     */
 
     @Transactional
     public FootballMember createAndAddMemberToGroup(Long groupID, String memberNickname) {
         FootballGroup footballGroup = footballGroupRepository.findById(groupID)
-            .orElseThrow(() -> new IllegalArgumentException("Group with id = " + groupID + " does not exist!"));
+                .orElseThrow(() -> new IllegalArgumentException("Group with id = " + groupID + " does not exist!"));
+
+        if (footballMemberRepository.existsByNameAndGroup(memberNickname, groupID)) {
+            throw new IllegalArgumentException("Member with name = " + memberNickname + " already exists in the group!");
+        }
+
         FootballMember newMember = new FootballMember(memberNickname, footballGroup);
         newMember = footballMemberRepository.save(newMember);
-        newMember.setGroup(null);
 
         return newMember;
     }
@@ -79,7 +85,7 @@ public class FootballGroupService {
     @Transactional
     public FootballGroup removeMemberFromGroup(Long groupID, FootballMember member) {
         FootballGroup footballGroup = footballGroupRepository.findById(groupID)
-            .orElseThrow(() -> new IllegalArgumentException("Group with id = " + groupID + " does not exist!"));
+                .orElseThrow(() -> new IllegalArgumentException("Group with id = " + groupID + " does not exist!"));
         footballGroup.removeMember(member);
 
         footballMemberRepository.deleteById(member.getId());
@@ -90,20 +96,21 @@ public class FootballGroupService {
     @Transactional
     public FootballGroup removeMemberFromGroup(Long groupID, Long memberID) {
         FootballGroup footballGroup = footballGroupRepository.findById(groupID)
-            .orElseThrow(() -> new IllegalArgumentException("Group with id = " + groupID + " does not exist!"));
+                .orElseThrow(() -> new IllegalArgumentException("Group with id = " + groupID + " does not exist!"));
         footballGroup.removeMember(memberID);
-        
+
         footballMemberRepository.deleteById(memberID);
 
         return footballGroup;
     }
 
     @Transactional
-    public void addNewGame(AddNewFootballGameRequest request) {
+    public FootballGame addNewGame(AddNewFootballGameRequest request) {
 
         // Retrieve group
         FootballGroup group = footballGroupRepository.findById(request.getGroupID())
-            .orElseThrow(() -> new IllegalArgumentException("Group with id = " + request.getGroupID() + " does not exist!"));
+                .orElseThrow(() -> new IllegalArgumentException(
+                        "Group with id = " + request.getGroupID() + " does not exist!"));
 
         // Save game member stats
         for (FootballMember member : request.getMembersGameStats()) {
@@ -112,21 +119,29 @@ public class FootballGroupService {
         }
 
         // Create new game
-        FootballGame newGame = new FootballGame(new Date(), group);
+        Calendar calendar = Calendar.getInstance();
+        FootballGame newGame =
+        new FootballGame(LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)+1, calendar.get(Calendar.DAY_OF_MONTH)), group);
         newGame.setVictory(request.getVictory());
         newGame.setMembers(request.getMembersGameStats());
 
-        footballGameRepository.save(newGame);
+        newGame = footballGameRepository.save(newGame);
 
         // Update group members with the new stats
         for (FootballMember footballMember : request.getUpdatedMembers()) {
             FootballMember dbMember = footballMemberRepository.findById(footballMember.getId())
-            .orElseThrow(() -> new IllegalArgumentException("Member with id = " + footballMember.getId() + " does not exists!"));
+                    .orElseThrow(() -> new IllegalArgumentException(
+                            "Member with id = " + footballMember.getId() + " does not exists!"));
 
             dbMember.setGoals(footballMember.getGoals());
             dbMember.setAssists(footballMember.getAssists());
             dbMember.setSaves(footballMember.getSaves());
             dbMember.setFouls(footballMember.getFouls());
+            dbMember.setWins(footballMember.getWins());
+            dbMember.setLoses(footballMember.getLoses());
+            dbMember.setDraws(footballMember.getDraws());
         }
+
+        return newGame;
     }
 }

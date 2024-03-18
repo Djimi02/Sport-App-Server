@@ -19,12 +19,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Data
-@NoArgsConstructor
 public abstract class Member {
 
     @Id
@@ -49,10 +47,23 @@ public abstract class Member {
     @JoinColumn(name="group_id")
     protected Group group;
 
+    protected Integer wins;
+    protected Integer draws;
+    protected Integer loses;
+
+    public Member() {initVars();}
+
     public Member(String nickname, Sports sport, Group group) {
         this.nickname = nickname;
         this.sport = sport;
         this.group = group;
+        initVars();
+    }
+
+    private void initVars() {
+        this.wins = 0;
+        this.draws = 0;
+        this.loses = 0;
     }
 
 }

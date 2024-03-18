@@ -1,5 +1,6 @@
 package com.example.project.model.member;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -37,5 +38,11 @@ public class FootballMemberRepositoryTest {
     public void retrieveMemberTest() {
         FootballMember footballMember = footballMemberRepository.findById(3l).get();
         assertTrue(footballMember.getGroup() instanceof FootballGroup);
+    }
+
+    @Test
+    public void existsByNameAndGroupTest() {
+        assertTrue(footballMemberRepository.existsByNameAndGroup("djimi", 1l));
+        assertFalse(footballMemberRepository.existsByNameAndGroup("djimi", 2l));
     }
 }

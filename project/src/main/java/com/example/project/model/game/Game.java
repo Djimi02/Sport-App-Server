@@ -1,6 +1,6 @@
 package com.example.project.model.game;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import com.example.project.model.Sports;
 
@@ -28,13 +28,13 @@ public abstract class Game {
     protected Long id;
 
     @Column(nullable = false)
-    protected Date date;
+    protected LocalDate date;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     protected Sports sport;
 
-    public Game(Date date, Sports sport) {
+    public Game(LocalDate date, Sports sport) {
         this.date = date;
         this.sport = sport;
     }

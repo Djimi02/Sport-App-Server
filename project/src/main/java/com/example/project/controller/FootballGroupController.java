@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.project.model.game.FootballGame;
 import com.example.project.model.group.FootballGroup;
 import com.example.project.model.member.FootballMember;
 import com.example.project.request.AddNewFootballGameRequest;
@@ -34,12 +35,17 @@ public class FootballGroupController {
 
     @PostMapping("/add/member/{groupid}/{name}")
     public FootballMember createFootballMember(@PathVariable(name = "groupid") Long groupID, @PathVariable(name = "name") String memberName) {
-        return footballGroupService.createAndAddMemberToGroup(groupID, memberName);
+        FootballMember output = footballGroupService.createAndAddMemberToGroup(groupID, memberName);
+        output.setGroup(null);
+        return output;
     }
 
     @PostMapping("/add/game")
-    public void addNewGame(@RequestBody AddNewFootballGameRequest request) {
-        footballGroupService.addNewGame(request);
+    public FootballGame addNewGame(@RequestBody AddNewFootballGameRequest request) {
+        FootballGame output = footballGroupService.addNewGame(request);
+        output.setGroup(null);
+        output.setMembers(null);
+        return output;
     }
 
 }

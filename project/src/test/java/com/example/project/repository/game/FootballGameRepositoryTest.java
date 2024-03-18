@@ -27,7 +27,7 @@ public class FootballGameRepositoryTest {
     @Test
     public void saveFootballGameTest() {
         FootballGroup footballGroup = footballGroupRepository.findById(1l).get();
-        FootballGame footballGame = new FootballGame(new Date(), footballGroup);
+        FootballGame footballGame = new FootballGame(null, footballGroup);
         Long memberID = 18l;
         FootballMember footballMember = footballMemberRepository.findById(memberID).get();
         footballGame.addMember(footballMember);
