@@ -3,6 +3,7 @@ package com.example.project.service.implementation;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -163,5 +164,13 @@ public class FootballGroupService {
         builder.append(":");
         builder.append(team2Score);
         return builder.toString();
+    }
+
+    public List<FootballMember> getGameStats(Long gameID) {
+        Optional<FootballGame> game = footballGameRepository.findById(gameID);
+        if (game.isEmpty()) {
+            throw new IllegalAccessError("Game with id = " + gameID + " does not exists!");
+        }
+        return footballGameRepository.getGameStats(gameID);
     }
 }

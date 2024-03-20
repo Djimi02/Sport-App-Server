@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.example.project.model.Sports;
 import com.example.project.model.group.FootballGroup;
 import com.example.project.repository.group.FootballGroupRepository;
 

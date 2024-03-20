@@ -1,5 +1,6 @@
 package com.example.project.controller;
 
+import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,13 +29,20 @@ public class FootballGroupController {
         return footballGroupService.findFootballGroup(groupID);
     }
 
+    @GetMapping("/get/gamestats/{id}")
+    public List<FootballMember> getGameStats(@PathVariable(name = "id") Long gameID) {
+        return footballGroupService.getGameStats(gameID);
+    }
+
     @PostMapping("/save/{name}/{userid}")
-    public FootballGroup createFootballGroup(@PathVariable(name = "name") String name, @PathVariable(name = "userid") Long userID) {
+    public FootballGroup createFootballGroup(@PathVariable(name = "name") String name,
+            @PathVariable(name = "userid") Long userID) {
         return footballGroupService.saveFootballGroup(name, userID);
     }
 
     @PostMapping("/add/member/{groupid}/{name}")
-    public FootballMember createFootballMember(@PathVariable(name = "groupid") Long groupID, @PathVariable(name = "name") String memberName) {
+    public FootballMember createFootballMember(@PathVariable(name = "groupid") Long groupID,
+            @PathVariable(name = "name") String memberName) {
         FootballMember output = footballGroupService.createAndAddMemberToGroup(groupID, memberName);
         output.setGroup(null);
         return output;

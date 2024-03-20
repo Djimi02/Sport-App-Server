@@ -1,6 +1,6 @@
 package com.example.project.repository.game;
 
-import java.util.Date;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,5 +38,13 @@ public class FootballGameRepositoryTest {
     public void retrieveFootballGameTest() {
         FootballGame footballGame = footballGameRepository.findById(1l).get();
         System.out.println("NUM OF MEMBERS = " + footballGame.getMembers().size());
+    }
+
+    @Test
+    public void getGameStatsTest() {
+        List<FootballMember> stats = footballGameRepository.getGameStats(7l);
+        for (FootballMember footballMember : stats) {
+            System.out.println(footballMember.toString());
+        }
     }
 }

@@ -1,12 +1,11 @@
 package com.example.project.service;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.example.project.model.User;
 import com.example.project.model.group.FootballGroup;
 import com.example.project.model.member.FootballMember;
 import com.example.project.repository.UserRepository;
@@ -62,5 +61,13 @@ public class FootballGroupServiceTest {
         Long memberID = 17l;
         Long groupID = 1l;
         footballGroupService.removeMemberFromGroup(groupID, memberID);
+    }
+
+    @Test
+    public void getGameStatsTest() {
+        List<FootballMember> stats = footballGroupService.getGameStats(1l);
+        for (FootballMember footballMember : stats) {
+            System.out.println(footballMember.toString());
+        }
     }
 }

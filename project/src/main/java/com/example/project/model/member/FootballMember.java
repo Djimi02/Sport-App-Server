@@ -19,12 +19,23 @@ public class FootballMember extends Member {
 
     public FootballMember() {
         setSport(Sports.FOOTBALL);
+        initVars();
     }
 
     public FootballMember(String nickname, FootballGroup group) {
         super(nickname, Sports.FOOTBALL, group);
 
         initVars();
+    }
+
+    // Used for custum query in FootballGameRepository
+    public FootballMember(String nickname, int goals, int assists, int saves, int fouls, Boolean isPartOfTeam1) {
+        super(nickname, Sports.FOOTBALL, null);
+        this.goals = goals;
+        this.assists = assists;
+        this.saves = saves;
+        this.fouls = fouls;
+        this.isPartOfTeam1 = isPartOfTeam1;
     }
 
     private void initVars() {
