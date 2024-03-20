@@ -2,6 +2,7 @@ package com.example.project.service.implementation;
 
 import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -124,6 +125,7 @@ public class FootballGroupService {
         new FootballGame(LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)+1, calendar.get(Calendar.DAY_OF_MONTH)), group);
         newGame.setVictory(request.getVictory());
         newGame.setMembers(request.getMembersGameStats());
+        newGame.setResults(createResults(request.getMembersGameStats()));
 
         newGame = footballGameRepository.save(newGame);
 
@@ -143,5 +145,23 @@ public class FootballGroupService {
         }
 
         return newGame;
+    }
+
+    private String createResults(List<FootballMember> membersGameStats) {
+        StringBuilder builder = new StringBuilder();
+        int team1Score = 0;
+        int team2Score = 0;
+        for (FootballMember member : membersGameStats) {
+            if (member.getIsPartOfTeam1()) {
+                team1Score += member.getGoals();
+            } else {
+                team2Score += member.getGoals();
+            }
+        }
+
+        builder.append(team1Score);
+        builder.append(":");
+        builder.append(team2Score);
+        return builder.toString();
     }
 }

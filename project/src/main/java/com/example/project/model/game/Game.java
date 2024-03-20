@@ -30,6 +30,8 @@ public abstract class Game {
     @Column(nullable = false)
     protected LocalDate date;
 
+    protected String results;
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     protected Sports sport;
@@ -37,6 +39,7 @@ public abstract class Game {
     public Game(LocalDate date, Sports sport) {
         this.date = date;
         this.sport = sport;
+        this.results = "";
     }
 
 }
