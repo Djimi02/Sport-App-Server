@@ -33,7 +33,7 @@ public abstract class Member {
     @Column(nullable = false)
     protected String nickname;
 
-    @JsonIgnoreProperties({"members"})
+    @JsonIgnoreProperties({"members", "role", "email"})
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name="user_id")
     protected User user;

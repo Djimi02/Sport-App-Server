@@ -23,7 +23,7 @@ public class FootballGroup extends Group {
     @OneToMany(mappedBy="group", fetch = FetchType.EAGER)
     protected List<FootballGame> games;
 
-    @JsonIgnoreProperties({"group", "games", "user"})
+    @JsonIgnoreProperties({"group", "games"})
     @OneToMany(mappedBy="group", fetch = FetchType.EAGER)
     protected List<FootballMember> members;
     
