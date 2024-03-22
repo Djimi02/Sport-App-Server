@@ -80,6 +80,7 @@ public class FootballGroupService {
         }
 
         FootballMember newMember = new FootballMember(memberNickname, footballGroup);
+        newMember.setIsAdmin(false);
         newMember = footballMemberRepository.save(newMember);
 
         return newMember;
