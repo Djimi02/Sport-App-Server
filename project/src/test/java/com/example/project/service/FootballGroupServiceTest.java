@@ -49,16 +49,8 @@ public class FootballGroupServiceTest {
     }
 
     @Test
-    public void removeMemberFromGroupTest1() {
-        Long memberID = 16l;
-        Long groupID = 1l;
-        FootballMember member = footballMemberRepository.findById(memberID).get();
-        footballGroupService.removeMemberFromGroup(groupID, member);
-    }
-
-    @Test
     public void removeMemberFromGroupTest2() {
-        Long memberID = 17l;
+        Long memberID = 2l;
         Long groupID = 1l;
         footballGroupService.removeMemberFromGroup(groupID, memberID);
     }

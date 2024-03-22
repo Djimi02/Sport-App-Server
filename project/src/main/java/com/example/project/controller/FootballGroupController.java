@@ -2,6 +2,7 @@ package com.example.project.controller;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -54,6 +55,12 @@ public class FootballGroupController {
         output.setGroup(null);
         output.setMembers(null);
         return output;
+    }
+
+    @DeleteMapping("/delete/{groupid}/{memberid}")
+    public void removeMemberFromGroup(@PathVariable(name = "groupid") Long groupID,
+    @PathVariable(name = "memberid") Long memberID) {
+        footballGroupService.removeMemberFromGroup(groupID, memberID);
     }
 
 }

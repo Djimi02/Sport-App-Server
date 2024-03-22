@@ -84,26 +84,14 @@ public class FootballGroupService {
         return newMember;
     }
 
-    @Transactional
-    public FootballGroup removeMemberFromGroup(Long groupID, FootballMember member) {
-        FootballGroup footballGroup = footballGroupRepository.findById(groupID)
+    public void removeMemberFromGroup(Long groupID, Long memberID) {
+        footballGroupRepository.findById(groupID)
                 .orElseThrow(() -> new IllegalArgumentException("Group with id = " + groupID + " does not exist!"));
-        footballGroup.removeMember(member);
 
-        footballMemberRepository.deleteById(member.getId());
-
-        return footballGroup;
-    }
-
-    @Transactional
-    public FootballGroup removeMemberFromGroup(Long groupID, Long memberID) {
-        FootballGroup footballGroup = footballGroupRepository.findById(groupID)
-                .orElseThrow(() -> new IllegalArgumentException("Group with id = " + groupID + " does not exist!"));
-        footballGroup.removeMember(memberID);
+        footballMemberRepository.findById(memberID)
+            .orElseThrow(() -> new IllegalArgumentException("Member with id = " + memberID + " does not exist!"));
 
         footballMemberRepository.deleteById(memberID);
-
-        return footballGroup;
     }
 
     @Transactional
