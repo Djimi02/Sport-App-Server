@@ -42,6 +42,7 @@ public class FootballGroupService {
 
         FootballMember newMember = new FootballMember(user.getUserName(), savedGroup);
         newMember.setUser(user);
+        newMember.setIsAdmin(true);
         newMember = footballMemberRepository.save(newMember);
 
         savedGroup.addMember(newMember);

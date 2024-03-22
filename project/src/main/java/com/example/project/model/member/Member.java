@@ -47,6 +47,8 @@ public abstract class Member {
     @JoinColumn(name="group_id")
     protected Group group;
 
+    protected Boolean isAdmin;
+
     protected Integer wins;
     protected Integer draws;
     protected Integer loses;
