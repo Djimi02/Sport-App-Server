@@ -65,6 +65,13 @@ public class FootballGroupService {
         return footballGroup;
     }
 
+    public void deleteFootballGroup(long groupID) {
+        FootballGroup group = footballGroupRepository.findById(groupID)
+            	.orElseThrow(() -> new IllegalArgumentException("Group with id = " + groupID + " does not exist!"));      
+        
+        footballGroupRepository.deleteById(groupID);
+    }
+
     /*
      * =============================================================================
      * ======================================

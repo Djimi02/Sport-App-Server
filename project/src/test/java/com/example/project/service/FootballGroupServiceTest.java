@@ -62,4 +62,9 @@ public class FootballGroupServiceTest {
             System.out.println(footballMember.toString());
         }
     }
+
+    @Test
+    public void deleteGroup() {
+        footballGroupService.deleteFootballGroup(6);
+    }
 }

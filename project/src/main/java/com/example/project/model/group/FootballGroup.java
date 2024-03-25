@@ -8,6 +8,7 @@ import com.example.project.model.game.FootballGame;
 import com.example.project.model.member.FootballMember;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
@@ -20,11 +21,11 @@ import lombok.NoArgsConstructor;
 public class FootballGroup extends Group {
 
     @JsonIgnoreProperties({"group", "members"})
-    @OneToMany(mappedBy="group", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy="group", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
     protected List<FootballGame> games;
 
     @JsonIgnoreProperties({"group", "games"})
-    @OneToMany(mappedBy="group", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy="group", fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
     protected List<FootballMember> members;
     
     // TODO: ADD MORE GROUP STATS VARS

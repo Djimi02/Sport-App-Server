@@ -30,7 +30,7 @@ public class FootballGame extends Game {
     private FootballGroup group;
 
     @JsonIgnoreProperties({"group", "user"})
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     @JoinTable(
         name = "football_games_played", 
         joinColumns = @JoinColumn(name = "game_id"), 

@@ -63,4 +63,9 @@ public class FootballGroupController {
         footballGroupService.removeMemberFromGroup(groupID, memberID);
     }
 
+    @DeleteMapping("/delete/{groupid}")
+    public void deleteGroup(@PathVariable(name = "groupid") Long groupID) {
+        footballGroupService.deleteFootballGroup(groupID);
+    }
+
 }
