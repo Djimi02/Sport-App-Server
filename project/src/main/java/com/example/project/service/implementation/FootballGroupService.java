@@ -89,10 +89,7 @@ public class FootballGroupService {
         return newMember;
     }
 
-    public void removeMemberFromGroup(Long groupID, Long memberID) {
-        footballGroupRepository.findById(groupID)
-                .orElseThrow(() -> new IllegalArgumentException("Group with id = " + groupID + " does not exist!"));
-
+    public void removeMemberFromGroup(Long memberID) {
         footballMemberRepository.findById(memberID)
             .orElseThrow(() -> new IllegalArgumentException("Member with id = " + memberID + " does not exist!"));
 
