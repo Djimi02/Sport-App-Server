@@ -25,14 +25,11 @@ public class FootballGroupController {
 
     private FootballGroupService footballGroupService;
 
+    /* GROUP */
+
     @GetMapping("/get/{id}")
     public FootballGroup getFootballGroup(@PathVariable(name = "id") Long groupID) {
         return footballGroupService.findFootballGroup(groupID);
-    }
-
-    @GetMapping("/get/gamestats/{id}")
-    public List<FootballMember> getGameStats(@PathVariable(name = "id") Long gameID) {
-        return footballGroupService.getGameStats(gameID);
     }
 
     @PostMapping("/save/{name}/{userid}")
@@ -41,12 +38,32 @@ public class FootballGroupController {
         return footballGroupService.saveFootballGroup(name, userID);
     }
 
+    @DeleteMapping("/delete/{groupid}")
+    public void deleteGroup(@PathVariable(name = "groupid") Long groupID) {
+        footballGroupService.deleteFootballGroup(groupID);
+    }
+
+    /* Member */
+
     @PostMapping("/add/member/{groupid}/{name}")
     public FootballMember createFootballMember(@PathVariable(name = "groupid") Long groupID,
             @PathVariable(name = "name") String memberName) {
         FootballMember output = footballGroupService.createAndAddMemberToGroup(groupID, memberName);
         output.setGroup(null);
         return output;
+    }
+
+    @DeleteMapping("/delete/{groupid}/{memberid}")
+    public void removeMemberFromGroup(@PathVariable(name = "groupid") Long groupID,
+    @PathVariable(name = "memberid") Long memberID) {
+        footballGroupService.removeMemberFromGroup(groupID, memberID);
+    }
+
+    /* Game */
+
+    @GetMapping("/get/gamestats/{id}")
+    public List<FootballMember> getGameStats(@PathVariable(name = "id") Long gameID) {
+        return footballGroupService.getGameStats(gameID);
     }
 
     @PostMapping("/add/game")
@@ -57,15 +74,8 @@ public class FootballGroupController {
         return output;
     }
 
-    @DeleteMapping("/delete/{groupid}/{memberid}")
-    public void removeMemberFromGroup(@PathVariable(name = "groupid") Long groupID,
-    @PathVariable(name = "memberid") Long memberID) {
-        footballGroupService.removeMemberFromGroup(groupID, memberID);
+    @DeleteMapping("/delete/game/{id}")
+    public void deleteGame(@PathVariable(name = "id") Long gameID) {
+        footballGroupService.deleteFootballGame(gameID);
     }
-
-    @DeleteMapping("/delete/{groupid}")
-    public void deleteGroup(@PathVariable(name = "groupid") Long groupID) {
-        footballGroupService.deleteFootballGroup(groupID);
-    }
-
 }

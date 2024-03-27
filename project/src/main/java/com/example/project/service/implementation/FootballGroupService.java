@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.project.model.User;
 import com.example.project.model.game.FootballGame;
+import com.example.project.model.game.Game;
 import com.example.project.model.group.FootballGroup;
 import com.example.project.model.member.FootballMember;
 import com.example.project.repository.UserRepository;
@@ -29,9 +30,7 @@ public class FootballGroupService {
     private UserRepository userRepository;
     private FootballGameRepository footballGameRepository;
 
-    public FootballGroup saveFootballGroup(FootballGroup footballGroup) {
-        return footballGroupRepository.save(footballGroup);
-    }
+    /* GROUP */
 
     public FootballGroup saveFootballGroup(String name, Long userID) {
         FootballGroup group = new FootballGroup(name);
@@ -72,10 +71,7 @@ public class FootballGroupService {
         footballGroupRepository.deleteById(groupID);
     }
 
-    /*
-     * =============================================================================
-     * ======================================
-     */
+    /* Member */
 
     @Transactional
     public FootballMember createAndAddMemberToGroup(Long groupID, String memberNickname) {
@@ -102,6 +98,8 @@ public class FootballGroupService {
 
         footballMemberRepository.deleteById(memberID);
     }
+
+    /* Game */
 
     @Transactional
     public FootballGame addNewGame(AddNewFootballGameRequest request) {
@@ -169,5 +167,47 @@ public class FootballGroupService {
             throw new IllegalAccessError("Game with id = " + gameID + " does not exists!");
         }
         return footballGameRepository.getGameStats(gameID);
+    }
+
+    @Transactional
+    public void deleteFootballGame(Long gameID) {
+        FootballGame game = footballGameRepository.findById(gameID)
+            .orElseThrow(() -> new IllegalAccessError("Game with id = " + gameID + " does not exists!"));
+
+        decreaseMemberStatsAfterGameDeleted(game, game.getMembers());
+
+        footballGameRepository.delete(game);
+    }
+
+
+    private void decreaseMemberStatsAfterGameDeleted(FootballGame game, List<FootballMember> members) {
+        for (int i = 0; i < members.size(); i++) {
+            FootballMember associatedGMember = getGroupMemberByNickname(game.getGroup(), members.get(i).getNickname());
+            if (associatedGMember == null) {
+                return;
+            }
+            associatedGMember.setGoals(associatedGMember.getGoals() - members.get(i).getGoals());
+            associatedGMember.setAssists(associatedGMember.getAssists() - members.get(i).getAssists());
+            associatedGMember.setSaves(associatedGMember.getSaves() - members.get(i).getSaves());
+            associatedGMember.setFouls(associatedGMember.getFouls() - members.get(i).getFouls());
+            if (game.getVictory() == 0) { // draw
+                associatedGMember.setDraws(associatedGMember.getDraws()-1);
+            } else if ((game.getVictory() == -1 && members.get(i).getIsPartOfTeam1() ||
+                    (game.getVictory() == 1 && !members.get(i).getIsPartOfTeam1()))) { // player had won
+                associatedGMember.setWins(associatedGMember.getWins()-1);
+            } else if ((game.getVictory() == 1 && members.get(i).getIsPartOfTeam1() ||
+                    (game.getVictory() == -1 && !members.get(i).getIsPartOfTeam1()))) { // player had lost
+                associatedGMember.setLoses(associatedGMember.getLoses()-1);
+            }
+        }
+    }
+
+    private FootballMember getGroupMemberByNickname(FootballGroup group, String nickname) {
+        for (FootballMember member : group.getMembers()) {
+            if (member.getNickname().equals(nickname)) {
+                return member;
+            }
+        }
+        return null;
     }
 }

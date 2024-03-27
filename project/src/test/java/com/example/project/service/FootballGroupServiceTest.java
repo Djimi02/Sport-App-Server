@@ -23,14 +23,6 @@ public class FootballGroupServiceTest {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Test
-    public void saveGroupTest1() {
-        String name = "Mosoma";
-        FootballGroup footballGroup = new FootballGroup(name);
-        footballGroupService.saveFootballGroup(footballGroup);
-    }
-
     @Test
     public void updateGroupNameTest() {
         Long id = 1l;
@@ -66,5 +58,10 @@ public class FootballGroupServiceTest {
     @Test
     public void deleteGroup() {
         footballGroupService.deleteFootballGroup(6);
+    }
+
+    @Test
+    public void deleteGame() {
+        footballGroupService.deleteFootballGame(4l);
     }
 }

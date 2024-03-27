@@ -31,6 +31,7 @@ public abstract class Game {
     protected LocalDate date;
 
     protected String results;
+    private Integer victory = null; // -1 -> team 1 won, 0 -> draw, 1 -> team 2 won
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
