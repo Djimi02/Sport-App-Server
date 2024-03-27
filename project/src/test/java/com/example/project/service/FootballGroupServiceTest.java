@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.example.project.model.group.FootballGroup;
 import com.example.project.model.member.FootballMember;
 import com.example.project.repository.UserRepository;
 import com.example.project.repository.member.FootballMemberRepository;
@@ -43,8 +42,7 @@ public class FootballGroupServiceTest {
     @Test
     public void removeMemberFromGroupTest2() {
         Long memberID = 2l;
-        Long groupID = 1l;
-        footballGroupService.removeMemberFromGroup(groupID, memberID);
+        footballGroupService.removeMemberFromGroup(memberID);
     }
 
     @Test
