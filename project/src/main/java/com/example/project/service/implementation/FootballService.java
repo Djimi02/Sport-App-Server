@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.project.model.User;
 import com.example.project.model.game.FootballGame;
-import com.example.project.model.game.Game;
 import com.example.project.model.group.FootballGroup;
 import com.example.project.model.member.FootballMember;
 import com.example.project.repository.UserRepository;
@@ -23,7 +22,7 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class FootballGroupService {
+public class FootballService {
 
     private FootballGroupRepository footballGroupRepository;
     private FootballMemberRepository footballMemberRepository;
@@ -65,7 +64,7 @@ public class FootballGroupService {
     }
 
     public void deleteFootballGroup(long groupID) {
-        FootballGroup group = footballGroupRepository.findById(groupID)
+        footballGroupRepository.findById(groupID)
             	.orElseThrow(() -> new IllegalArgumentException("Group with id = " + groupID + " does not exist!"));      
         
         footballGroupRepository.deleteById(groupID);

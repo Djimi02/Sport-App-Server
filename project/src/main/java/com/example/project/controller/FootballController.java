@@ -14,16 +14,16 @@ import com.example.project.model.game.FootballGame;
 import com.example.project.model.group.FootballGroup;
 import com.example.project.model.member.FootballMember;
 import com.example.project.request.AddNewFootballGameRequest;
-import com.example.project.service.implementation.FootballGroupService;
+import com.example.project.service.implementation.FootballService;
 
 import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping("/football/")
 @AllArgsConstructor
-public class FootballGroupController {
+public class FootballController {
 
-    private FootballGroupService footballGroupService;
+    private FootballService footballGroupService;
 
     /* GROUP */
 

@@ -9,7 +9,7 @@ import lombok.Data;
 
 @Data
 @Entity
-public class FootballMember extends Member {
+public class FootballMember extends Member<FootballGroup> {
 
     private int goals;
     private int assists;

@@ -23,7 +23,7 @@ import lombok.Data;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Data
-public abstract class Member {
+public abstract class Member<GroupT extends Group<?, ?>> {
 
     @Id
     @SequenceGenerator(name = "memberSeqGen", allocationSize = 1)
@@ -33,19 +33,19 @@ public abstract class Member {
     @Column(nullable = false)
     protected String nickname;
 
-    @JsonIgnoreProperties({"members", "role", "email"})
+    @JsonIgnoreProperties({ "members", "role", "email" })
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     protected User user;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     protected Sports sport;
 
-    @JsonIgnoreProperties({"members", "games"})
+    @JsonIgnoreProperties({ "members", "games" })
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinColumn(name="group_id")
-    protected Group group;
+    @JoinColumn(name = "group_id")
+    protected GroupT group;
 
     protected Boolean isAdmin;
 
@@ -53,9 +53,11 @@ public abstract class Member {
     protected Integer draws;
     protected Integer loses;
 
-    public Member() {initVars();}
+    public Member() {
+        initVars();
+    }
 
-    public Member(String nickname, Sports sport, Group group) {
+    public Member(String nickname, Sports sport, GroupT group) {
         this.nickname = nickname;
         this.sport = sport;
         this.group = group;

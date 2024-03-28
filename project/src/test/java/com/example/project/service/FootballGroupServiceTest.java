@@ -9,13 +9,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.example.project.model.member.FootballMember;
 import com.example.project.repository.UserRepository;
 import com.example.project.repository.member.FootballMemberRepository;
-import com.example.project.service.implementation.FootballGroupService;
+import com.example.project.service.implementation.FootballService;
 
 @SpringBootTest
 public class FootballGroupServiceTest {
 
     @Autowired
-    private FootballGroupService footballGroupService;
+    private FootballService footballGroupService;
 
     @Autowired
     private FootballMemberRepository footballMemberRepository;
