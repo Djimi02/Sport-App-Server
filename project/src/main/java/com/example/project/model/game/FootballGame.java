@@ -7,11 +7,9 @@ import com.example.project.model.group.FootballGroup;
 import com.example.project.model.member.FootballMember;
 
 import jakarta.persistence.Entity;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Data
 @NoArgsConstructor
 public class FootballGame extends Game<FootballGroup, FootballMember> {
 

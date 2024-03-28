@@ -5,9 +5,12 @@ import com.example.project.model.Sports;
 import com.example.project.model.group.FootballGroup;
 
 import jakarta.persistence.Entity;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+// @Data
+@Getter
+@Setter
 @Entity
 public class FootballMember extends Member<FootballGroup> {
 
