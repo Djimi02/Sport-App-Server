@@ -2,6 +2,7 @@ package com.example.project.model.group;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import com.example.project.model.Sports;
 import com.example.project.model.game.Game;
@@ -32,6 +33,9 @@ public abstract class Group<MemberT extends Member<?>, GameT extends Game<?, ?>>
     @GeneratedValue(generator = "groupSeqGen")
     protected Long id;
 
+    @Column(nullable = false, unique = true)
+    protected UUID uuid;
+
     @Column(nullable = false)
     protected String name;
 
@@ -54,6 +58,7 @@ public abstract class Group<MemberT extends Member<?>, GameT extends Game<?, ?>>
     }
 
     public Group(String name, Sports sport) {
+        this.uuid = UUID.randomUUID();
         this.name = name;
         this.sport = sport;
         initVars();

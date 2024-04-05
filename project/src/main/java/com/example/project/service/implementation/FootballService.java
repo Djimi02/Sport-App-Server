@@ -31,6 +31,7 @@ public class FootballService {
 
     /* GROUP */
 
+    @Transactional
     public FootballGroup saveFootballGroup(String name, Long userID) {
         FootballGroup group = new FootballGroup(name);
         FootballGroup savedGroup = footballGroupRepository.save(group);

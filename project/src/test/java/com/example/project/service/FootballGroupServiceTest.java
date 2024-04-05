@@ -22,6 +22,14 @@ public class FootballGroupServiceTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Test
+    public void saveGroup() {
+        String groupName = "test name";
+        Long userID = 2l;
+        footballGroupService.saveFootballGroup(groupName, userID);
+    }
+
     @Test
     public void updateGroupNameTest() {
         Long id = 1l;
