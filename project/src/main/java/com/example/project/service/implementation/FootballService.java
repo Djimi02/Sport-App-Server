@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -49,9 +50,14 @@ public class FootballService {
         return savedGroup;
     }
 
-    public FootballGroup findFootballGroup(Long groupID) {
+    public FootballGroup findFootballGroupByID(Long groupID) {
         return footballGroupRepository.findById(groupID)
                 .orElseThrow(() -> new IllegalArgumentException("Group with id = " + groupID + " does not exist!"));
+    }
+
+    public FootballGroup findGroupByUUID(String uuidStr) {
+        UUID uuid = UUID.fromString(uuidStr);
+        return footballGroupRepository.findByUuid(uuid);
     }
 
     @Transactional

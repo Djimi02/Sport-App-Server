@@ -28,8 +28,13 @@ public class FootballController {
     /* GROUP */
 
     @GetMapping("/group/get/{id}")
-    public FootballGroup getFootballGroup(@PathVariable(name = "id") Long groupID) {
-        return footballGroupService.findFootballGroup(groupID);
+    public FootballGroup getFootballGroupByID(@PathVariable(name = "id") Long groupID) {
+        return footballGroupService.findFootballGroupByID(groupID);
+    }
+
+    @GetMapping("/group/get/uuid/{uuid}")
+    public FootballGroup findGroupByUUID(@PathVariable(name = "uuid") String uuidStr) {
+        return footballGroupService.findGroupByUUID(uuidStr);
     }
 
     @PostMapping("/group/save/{name}/{userid}")
