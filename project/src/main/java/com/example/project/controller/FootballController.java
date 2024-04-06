@@ -43,6 +43,18 @@ public class FootballController {
         return footballGroupService.saveFootballGroup(name, userID);
     }
 
+    @PostMapping("/group/join/notnew/{userid}/{memberid}")
+    public void joinGroupAsExistingMember(@PathVariable(name = "userid") long userID, @PathVariable(name = "memberid") long memberID) {
+        footballGroupService.joinGroupAsExistingMember(userID, memberID);
+    }
+
+    @PostMapping("/group/join/new/{userid}/{groupid}")
+    public FootballMember joinGroupAsNewMember(@PathVariable(name = "userid") long userID, @PathVariable(name = "groupid") long groupID) {
+        FootballMember member = footballGroupService.joinGroupAsNewMember(userID, groupID);
+        member.setGroup(null);
+        return member;
+    }
+
     @DeleteMapping("/group/delete/{id}")
     public void deleteGroup(@PathVariable(name = "id") Long groupID) {
         footballGroupService.deleteFootballGroup(groupID);

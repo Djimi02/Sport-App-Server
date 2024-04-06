@@ -15,7 +15,7 @@ public class FootballMemberServiceTest {
     @Test
     public void saveFootballMemberTest() {
         String nickname = "jimi2";
-        Long groupID = 1l;
+        Long groupID = 2l;
         footballMemberService.saveFootballMember(nickname, groupID);
     }
 

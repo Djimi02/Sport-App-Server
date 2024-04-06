@@ -68,6 +68,7 @@ public abstract class Member<GroupT extends Group<?, ?>> {
         this.wins = 0;
         this.draws = 0;
         this.loses = 0;
+        this.isAdmin = false;
     }
 
 }

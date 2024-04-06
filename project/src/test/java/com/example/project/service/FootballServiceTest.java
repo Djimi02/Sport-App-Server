@@ -12,7 +12,7 @@ import com.example.project.repository.member.FootballMemberRepository;
 import com.example.project.service.implementation.FootballService;
 
 @SpringBootTest
-public class FootballGroupServiceTest {
+public class FootballServiceTest {
 
     @Autowired
     private FootballService footballGroupService;
@@ -69,5 +69,19 @@ public class FootballGroupServiceTest {
     @Test
     public void deleteGame() {
         footballGroupService.deleteFootballGame(4l);
+    }
+
+    @Test
+    public void joinGroupAsExistingMember() {
+        long userID = 1l;
+        long memberID = 4l;
+        footballGroupService.joinGroupAsExistingMember(userID, memberID);
+    }
+
+    @Test
+    public void joinGroupAsNewMember() {
+        long userID = 1l;
+        long groupID = 2l;
+        footballGroupService.joinGroupAsNewMember(userID, groupID);
     }
 }

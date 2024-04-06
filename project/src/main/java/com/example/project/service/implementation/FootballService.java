@@ -102,6 +102,33 @@ public class FootballService {
         footballMemberRepository.deleteById(memberID);
     }
 
+    @Transactional
+    public void joinGroupAsExistingMember(long userID, long memberID) {
+        User user = userRepository.findById(userID)
+            .orElseThrow(() -> {throw new IllegalArgumentException("User with id = " + userID + " does not exists!");});
+
+        FootballMember member = footballMemberRepository.findById(memberID)
+            .orElseThrow(() -> {throw new IllegalArgumentException("Member with id = " + memberID + " does not exists!");});
+
+        member.setUser(user);
+    }
+
+    public FootballMember joinGroupAsNewMember(long userID, long groupID) {
+        User user = userRepository.findById(userID)
+            .orElseThrow(() -> {throw new IllegalArgumentException("User with id = " + userID + " does not exists!");});
+
+        FootballGroup group = footballGroupRepository.findById(groupID)
+            .orElseThrow(() -> {throw new IllegalArgumentException("Member with id = " + groupID + " does not exists!");});
+
+        FootballMember newMember = new FootballMember();
+        newMember.setUser(user);
+        newMember.setGroup(group);
+        newMember.setNickname(user.getUserName());
+        newMember = footballMemberRepository.save(newMember);
+
+        return newMember;
+    }
+
     /* Game */
 
     @Transactional
