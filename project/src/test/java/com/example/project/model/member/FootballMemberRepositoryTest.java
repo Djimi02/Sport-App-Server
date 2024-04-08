@@ -3,6 +3,9 @@ package com.example.project.model.member;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -44,5 +47,22 @@ public class FootballMemberRepositoryTest {
     public void existsByNameAndGroupTest() {
         assertTrue(footballMemberRepository.existsByNameAndGroup("djimi", 1l));
         assertFalse(footballMemberRepository.existsByNameAndGroup("djimi", 2l));
+    }
+
+    @Test
+    public void getByNameAndGroup() {
+        String name = "djimi";
+        long groupID = 9l;
+        Optional<FootballMember> memberOpt = footballMemberRepository.getByNameAndGroup(name, groupID);
+        // System.out.println("LIST = " + memberOpt);
+        if (memberOpt.isEmpty()) {
+            assertTrue(false);
+        } else {
+            if (memberOpt.get().getNickname().equals(name)) {
+                assertTrue(true);
+            } else {
+                assertTrue(false);
+            }
+        }
     }
 }

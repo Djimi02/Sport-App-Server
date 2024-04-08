@@ -139,10 +139,24 @@ public class FootballService {
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Group with id = " + request.getGroupID() + " does not exist!"));
 
-        // Save game member stats
-        for (FootballMember member : request.getMembersGameStats()) {
-            member.setGroup(null);
-            member = footballMemberRepository.save(member);
+        // Save game member stats and update the actual members with the new stats
+        for (FootballMember stats : request.getMembersGameStats()) {
+            stats.setGroup(null);
+            stats = footballMemberRepository.save(stats); // save
+
+            FootballMember dbMember = footballMemberRepository.getByNameAndGroup(stats.getNickname(), request.getGroupID())
+                .orElseThrow(() -> new IllegalArgumentException("Such member does not exists!"));
+            dbMember.setGoals(dbMember.getGoals() + stats.getGoals());
+            dbMember.setAssists(dbMember.getAssists() + stats.getAssists());
+            dbMember.setSaves(dbMember.getSaves() + stats.getSaves());
+            dbMember.setFouls(dbMember.getFouls() + stats.getFouls());
+            if (request.getVictory() == 0) { // draw
+                dbMember.setDraws(dbMember.getDraws() + 1);
+            } else if ((stats.getIsPartOfTeam1() && request.getVictory() == -1) || (!stats.getIsPartOfTeam1() && request.getVictory() == 1)) { // player won
+                dbMember.setWins(dbMember.getWins() + 1);
+            } else if ((stats.getIsPartOfTeam1() && request.getVictory() == 1) || (!stats.getIsPartOfTeam1() && request.getVictory() == -1)) { // player lost
+                dbMember.setLoses(dbMember.getLoses() + 1);
+            }
         }
 
         // Create new game
@@ -153,24 +167,7 @@ public class FootballService {
         newGame.setMembers(request.getMembersGameStats());
         newGame.setResults(createResults(request.getMembersGameStats()));
 
-        newGame = footballGameRepository.save(newGame);
-
-        // Update group members with the new stats
-        for (FootballMember footballMember : request.getUpdatedMembers()) {
-            FootballMember dbMember = footballMemberRepository.findById(footballMember.getId())
-                    .orElseThrow(() -> new IllegalArgumentException(
-                            "Member with id = " + footballMember.getId() + " does not exists!"));
-
-            dbMember.setGoals(footballMember.getGoals());
-            dbMember.setAssists(footballMember.getAssists());
-            dbMember.setSaves(footballMember.getSaves());
-            dbMember.setFouls(footballMember.getFouls());
-            dbMember.setWins(footballMember.getWins());
-            dbMember.setLoses(footballMember.getLoses());
-            dbMember.setDraws(footballMember.getDraws());
-        }
-
-        return newGame;
+        return footballGameRepository.save(newGame);
     }
 
     private String createResults(List<FootballMember> membersGameStats) {
