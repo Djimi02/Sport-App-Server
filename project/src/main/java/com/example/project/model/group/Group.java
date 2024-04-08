@@ -21,10 +21,12 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Table(name = "app_group")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Data
 public abstract class Group<MemberT extends Member<?>, GameT extends Game<?, ?>> {
 
