@@ -1,12 +1,9 @@
 package com.example.project.model.game;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.example.project.model.Sports;
 import com.example.project.model.group.Group;
-import com.example.project.model.member.Member;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
