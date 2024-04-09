@@ -78,8 +78,8 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findById(userID)
             .orElseThrow(() -> new IllegalArgumentException("User with id = " + userID + " does not exist."));
 
-        List<Member<?>> members = user.getMembers();
-        for (Member<?> member : members) { // remove user reference from members
+        List<Member<?,?>> members = user.getMembers();
+        for (Member<?,?> member : members) { // remove user reference from members
             member.setUser(null);
         }
 

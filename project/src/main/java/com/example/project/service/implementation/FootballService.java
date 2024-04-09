@@ -139,9 +139,17 @@ public class FootballService {
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Group with id = " + request.getGroupID() + " does not exist!"));
 
+        // Create new game
+        Calendar calendar = Calendar.getInstance();
+        FootballGame newGame =
+        new FootballGame(LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)+1, calendar.get(Calendar.DAY_OF_MONTH)), group);
+        newGame.setVictory(request.getVictory());
+        newGame.setResults(createResults(request.getMembersGameStats()));
+
         // Save game member stats and update the actual members with the new stats
         for (FootballMember stats : request.getMembersGameStats()) {
             stats.setGroup(null);
+            stats.setGame(newGame);
             stats = footballMemberRepository.save(stats); // save
 
             FootballMember dbMember = footballMemberRepository.getByNameAndGroup(stats.getNickname(), request.getGroupID())
@@ -158,14 +166,6 @@ public class FootballService {
                 dbMember.setLoses(dbMember.getLoses() + 1);
             }
         }
-
-        // Create new game
-        Calendar calendar = Calendar.getInstance();
-        FootballGame newGame =
-        new FootballGame(LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)+1, calendar.get(Calendar.DAY_OF_MONTH)), group);
-        newGame.setVictory(request.getVictory());
-        newGame.setMembers(request.getMembersGameStats());
-        newGame.setResults(createResults(request.getMembersGameStats()));
 
         return footballGameRepository.save(newGame);
     }
@@ -201,11 +201,15 @@ public class FootballService {
         FootballGame game = footballGameRepository.findById(gameID)
             .orElseThrow(() -> new IllegalAccessError("Game with id = " + gameID + " does not exists!"));
 
-        decreaseMemberStatsAfterGameDeleted(game, game.getMembers());
+        List<FootballMember> gameStats = getGameStats(gameID);
+        decreaseMemberStatsAfterGameDeleted(game, gameStats);
+
+        for (FootballMember gameStat : gameStats) {
+            footballMemberRepository.delete(gameStat);
+        }
 
         footballGameRepository.delete(game);
     }
-
 
     private void decreaseMemberStatsAfterGameDeleted(FootballGame game, List<FootballMember> members) {
         for (int i = 0; i < members.size(); i++) {

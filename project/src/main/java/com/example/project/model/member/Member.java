@@ -2,7 +2,9 @@ package com.example.project.model.member;
 
 import com.example.project.model.Sports;
 import com.example.project.model.User;
+import com.example.project.model.game.Game;
 import com.example.project.model.group.Group;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
@@ -23,7 +25,7 @@ import lombok.Data;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Data
-public abstract class Member<GroupT extends Group<?, ?>> {
+public abstract class Member<GroupT extends Group<?, ?>, GameT extends Game<?>> {
 
     @Id
     @SequenceGenerator(name = "memberSeqGen", allocationSize = 1)
@@ -38,14 +40,19 @@ public abstract class Member<GroupT extends Group<?, ?>> {
     @JoinColumn(name = "user_id")
     protected User user;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    protected Sports sport;
-
     @JsonIgnoreProperties({ "members", "games" })
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "group_id")
     protected GroupT group;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "game_id")
+    protected GameT game;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    protected Sports sport;
 
     protected Boolean isAdmin;
 

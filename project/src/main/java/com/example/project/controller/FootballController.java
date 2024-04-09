@@ -86,7 +86,6 @@ public class FootballController {
     public FootballGame addNewGame(@RequestBody AddNewFootballGameRequest request) {
         FootballGame output = footballGroupService.addNewGame(request);
         output.setGroup(null);
-        output.setMembers(null);
         return output;
     }
 

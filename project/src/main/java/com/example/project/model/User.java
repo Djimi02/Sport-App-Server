@@ -47,7 +47,7 @@ public class User {
 
     @JsonIgnoreProperties({"user", "games"})
     @OneToMany(mappedBy="user", fetch = FetchType.EAGER)
-    private List<Member<?>> members;
+    private List<Member<?,?>> members;
 
     public User(String userName, String email, String password) {
         this.userName = userName;

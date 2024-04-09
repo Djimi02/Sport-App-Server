@@ -57,7 +57,7 @@ public class FootballServiceTest {
     public void getGameStatsTest() {
         List<FootballMember> stats = footballGroupService.getGameStats(1l);
         for (FootballMember footballMember : stats) {
-            System.out.println(footballMember.toString());
+            System.out.println(footballMember.getNickname());
         }
     }
 
@@ -68,7 +68,7 @@ public class FootballServiceTest {
 
     @Test
     public void deleteGame() {
-        footballGroupService.deleteFootballGame(4l);
+        footballGroupService.deleteFootballGame(1l);
     }
 
     @Test

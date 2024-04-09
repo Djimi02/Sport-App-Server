@@ -2,6 +2,7 @@ package com.example.project.model.member;
 
 
 import com.example.project.model.Sports;
+import com.example.project.model.game.FootballGame;
 import com.example.project.model.group.FootballGroup;
 
 import jakarta.persistence.Entity;
@@ -12,7 +13,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class FootballMember extends Member<FootballGroup> {
+public class FootballMember extends Member<FootballGroup, FootballGame> {
 
     private int goals;
     private int assists;

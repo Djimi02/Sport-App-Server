@@ -20,8 +20,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import lombok.Data;
@@ -29,7 +27,7 @@ import lombok.Data;
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Data
-public abstract class Game<GroupT extends Group<?, ?>, MemberT extends Member<?>> {
+public abstract class Game<GroupT extends Group<?, ?>> {
 
     @Id
     @SequenceGenerator(name = "gameSeqGen", allocationSize = 1)
@@ -47,45 +45,18 @@ public abstract class Game<GroupT extends Group<?, ?>, MemberT extends Member<?>
     @JoinColumn(name = "group_id", nullable = false)
     private GroupT group;
 
-    @JsonIgnoreProperties({ "group", "user" })
-    @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE, CascadeType.REMOVE })
-    @JoinTable(name = "football_games_played", joinColumns = @JoinColumn(name = "game_id"), inverseJoinColumns = @JoinColumn(name = "member_id"))
-    private List<MemberT> members;
-
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     protected Sports sport;
 
-    public Game() {initVars();}
+    public Game() {
+    }
 
     public Game(LocalDate date, Sports sport, GroupT group) {
         this.date = date;
         this.sport = sport;
         this.group = group;
         this.victory = null;
-        initVars();
-    }
-
-    private void initVars() {
-        this.members = new ArrayList<>();
-    }
-
-    public void addMember(MemberT member) {
-        this.members.add(member);
-    }
-
-    public void removeMember(Long memberID) {
-        int memberToBeRemoved = -1;
-        for (int i = 0; i < this.members.size(); i++) {
-            if (this.members.get(i).getId() == memberID) {
-                memberToBeRemoved = i;
-                break;
-            }
-        }
-
-        if (memberToBeRemoved != -1) {
-            this.members.remove(memberToBeRemoved);
-        }
     }
 
 }

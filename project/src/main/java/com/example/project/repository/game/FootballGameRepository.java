@@ -13,7 +13,7 @@ import com.example.project.model.member.FootballMember;
 @Repository
 public interface FootballGameRepository extends JpaRepository<FootballGame, Long> {
 
-    @Query("SELECT fm FROM FootballGame fg JOIN fg.members fm WHERE fg.id = :gameId")
+    @Query("SELECT fm FROM FootballMember fm JOIN fm.game fg WHERE fg IS NOT NULL AND fg.id = :gameId")
     List<FootballMember> getGameStats(@Param("gameId") Long gameId);
     
 }

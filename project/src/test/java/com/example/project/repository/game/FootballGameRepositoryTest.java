@@ -30,14 +30,7 @@ public class FootballGameRepositoryTest {
         FootballGame footballGame = new FootballGame(null, footballGroup);
         Long memberID = 18l;
         FootballMember footballMember = footballMemberRepository.findById(memberID).get();
-        footballGame.addMember(footballMember);
         footballGameRepository.save(footballGame);
-    }
-
-    @Test
-    public void retrieveFootballGameTest() {
-        FootballGame footballGame = footballGameRepository.findById(1l).get();
-        System.out.println("NUM OF MEMBERS = " + footballGame.getMembers().size());
     }
 
     @Test

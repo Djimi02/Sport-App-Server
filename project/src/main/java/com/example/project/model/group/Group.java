@@ -28,7 +28,7 @@ import lombok.Data;
 @Table(name = "app_group")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Data
-public abstract class Group<MemberT extends Member<?>, GameT extends Game<?, ?>> {
+public abstract class Group<MemberT extends Member<?,?>, GameT extends Game<?>> {
 
     @Id
     @SequenceGenerator(name = "groupSeqGen", allocationSize = 1)
