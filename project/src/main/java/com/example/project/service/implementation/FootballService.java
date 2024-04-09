@@ -1,6 +1,7 @@
 package com.example.project.service.implementation;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
@@ -12,10 +13,12 @@ import com.example.project.model.User;
 import com.example.project.model.game.FootballGame;
 import com.example.project.model.group.FootballGroup;
 import com.example.project.model.member.FootballMember;
+import com.example.project.model.stats.FBStats;
 import com.example.project.repository.UserRepository;
 import com.example.project.repository.game.FootballGameRepository;
 import com.example.project.repository.group.FootballGroupRepository;
 import com.example.project.repository.member.FootballMemberRepository;
+import com.example.project.repository.stats.FBStatsRepository;
 import com.example.project.request.AddNewFootballGameRequest;
 
 import jakarta.transaction.Transactional;
@@ -29,6 +32,7 @@ public class FootballService {
     private FootballMemberRepository footballMemberRepository;
     private UserRepository userRepository;
     private FootballGameRepository footballGameRepository;
+    private FBStatsRepository fbStatsRepository;
 
     /* GROUP */
 
@@ -43,6 +47,7 @@ public class FootballService {
         FootballMember newMember = new FootballMember(user.getUserName(), savedGroup);
         newMember.setUser(user);
         newMember.setIsAdmin(true);
+        newMember.getStats().setMember(newMember);
         newMember = footballMemberRepository.save(newMember);
 
         savedGroup.addMember(newMember);
@@ -90,6 +95,7 @@ public class FootballService {
 
         FootballMember newMember = new FootballMember(memberNickname, footballGroup);
         newMember.setIsAdmin(false);
+        newMember.getStats().setMember(newMember);
         newMember = footballMemberRepository.save(newMember);
 
         return newMember;
@@ -144,41 +150,42 @@ public class FootballService {
         FootballGame newGame =
         new FootballGame(LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)+1, calendar.get(Calendar.DAY_OF_MONTH)), group);
         newGame.setVictory(request.getVictory());
-        newGame.setResults(createResults(request.getMembersGameStats()));
+        newGame.setResults(createResults(new ArrayList<>(request.getGameStats().values())));
+        newGame = footballGameRepository.save(newGame);
 
         // Save game member stats and update the actual members with the new stats
-        for (FootballMember stats : request.getMembersGameStats()) {
-            stats.setGroup(null);
-            stats.setGame(newGame);
-            stats = footballMemberRepository.save(stats); // save
+        for (Long memberID : request.getGameStats().keySet()) {
+            FBStats gameStats = request.getGameStats().get(memberID);
 
-            FootballMember dbMember = footballMemberRepository.getByNameAndGroup(stats.getNickname(), request.getGroupID())
+            FootballMember dbMember = footballMemberRepository.findById(memberID)
                 .orElseThrow(() -> new IllegalArgumentException("Such member does not exists!"));
-            dbMember.setGoals(dbMember.getGoals() + stats.getGoals());
-            dbMember.setAssists(dbMember.getAssists() + stats.getAssists());
-            dbMember.setSaves(dbMember.getSaves() + stats.getSaves());
-            dbMember.setFouls(dbMember.getFouls() + stats.getFouls());
-            if (request.getVictory() == 0) { // draw
-                dbMember.setDraws(dbMember.getDraws() + 1);
-            } else if ((stats.getIsPartOfTeam1() && request.getVictory() == -1) || (!stats.getIsPartOfTeam1() && request.getVictory() == 1)) { // player won
-                dbMember.setWins(dbMember.getWins() + 1);
-            } else if ((stats.getIsPartOfTeam1() && request.getVictory() == 1) || (!stats.getIsPartOfTeam1() && request.getVictory() == -1)) { // player lost
-                dbMember.setLoses(dbMember.getLoses() + 1);
-            }
+            FBStats dbMemberStats = dbMember.getStats();
+
+            dbMemberStats.setWins(dbMemberStats.getWins() + gameStats.getWins());
+            dbMemberStats.setDraws(dbMemberStats.getDraws() + gameStats.getDraws());
+            dbMemberStats.setLoses(dbMemberStats.getLoses() + gameStats.getLoses());
+            dbMemberStats.setGoals(dbMemberStats.getGoals() + gameStats.getGoals());
+            dbMemberStats.setAssists(dbMemberStats.getAssists() + gameStats.getAssists());
+            dbMemberStats.setSaves(dbMemberStats.getSaves() + gameStats.getSaves());
+            dbMemberStats.setFouls(dbMemberStats.getFouls() + gameStats.getFouls());
+
+            gameStats.setMember(dbMember);
+            gameStats.setGame(newGame);
+            fbStatsRepository.save(gameStats);
         }
 
-        return footballGameRepository.save(newGame);
+        return newGame;
     }
 
-    private String createResults(List<FootballMember> membersGameStats) {
+    private String createResults(List<FBStats> gameStats) {
         StringBuilder builder = new StringBuilder();
         int team1Score = 0;
         int team2Score = 0;
-        for (FootballMember member : membersGameStats) {
-            if (member.getIsPartOfTeam1()) {
-                team1Score += member.getGoals();
+        for (FBStats stats : gameStats) {
+            if (stats.getIsPartOfTeam1()) {
+                team1Score += stats.getGoals();
             } else {
-                team2Score += member.getGoals();
+                team2Score += stats.getGoals();
             }
         }
 
@@ -188,7 +195,7 @@ public class FootballService {
         return builder.toString();
     }
 
-    public List<FootballMember> getGameStats(Long gameID) {
+    public List<FBStats> getGameStats(Long gameID) {
         Optional<FootballGame> game = footballGameRepository.findById(gameID);
         if (game.isEmpty()) {
             throw new IllegalAccessError("Game with id = " + gameID + " does not exists!");
@@ -201,44 +208,27 @@ public class FootballService {
         FootballGame game = footballGameRepository.findById(gameID)
             .orElseThrow(() -> new IllegalAccessError("Game with id = " + gameID + " does not exists!"));
 
-        List<FootballMember> gameStats = getGameStats(gameID);
+        List<FBStats> gameStats = getGameStats(gameID);
         decreaseMemberStatsAfterGameDeleted(game, gameStats);
 
-        for (FootballMember gameStat : gameStats) {
-            footballMemberRepository.delete(gameStat);
+        for (FBStats gameStat : gameStats) {
+            fbStatsRepository.delete(gameStat);
         }
 
         footballGameRepository.delete(game);
     }
 
-    private void decreaseMemberStatsAfterGameDeleted(FootballGame game, List<FootballMember> members) {
-        for (int i = 0; i < members.size(); i++) {
-            FootballMember associatedGMember = getGroupMemberByNickname(game.getGroup(), members.get(i).getNickname());
-            if (associatedGMember == null) {
-                return;
-            }
-            associatedGMember.setGoals(associatedGMember.getGoals() - members.get(i).getGoals());
-            associatedGMember.setAssists(associatedGMember.getAssists() - members.get(i).getAssists());
-            associatedGMember.setSaves(associatedGMember.getSaves() - members.get(i).getSaves());
-            associatedGMember.setFouls(associatedGMember.getFouls() - members.get(i).getFouls());
-            if (game.getVictory() == 0) { // draw
-                associatedGMember.setDraws(associatedGMember.getDraws()-1);
-            } else if ((game.getVictory() == -1 && members.get(i).getIsPartOfTeam1() ||
-                    (game.getVictory() == 1 && !members.get(i).getIsPartOfTeam1()))) { // player had won
-                associatedGMember.setWins(associatedGMember.getWins()-1);
-            } else if ((game.getVictory() == 1 && members.get(i).getIsPartOfTeam1() ||
-                    (game.getVictory() == -1 && !members.get(i).getIsPartOfTeam1()))) { // player had lost
-                associatedGMember.setLoses(associatedGMember.getLoses()-1);
-            }
-        }
-    }
+    private void decreaseMemberStatsAfterGameDeleted(FootballGame game, List<FBStats> gameStats) {
+        for (FBStats gameStat : gameStats) {
+            FBStats associatedGMemberStats = gameStat.getMember().getStats();
 
-    private FootballMember getGroupMemberByNickname(FootballGroup group, String nickname) {
-        for (FootballMember member : group.getMembers()) {
-            if (member.getNickname().equals(nickname)) {
-                return member;
-            }
+            associatedGMemberStats.setWins(associatedGMemberStats.getWins() - gameStat.getWins());
+            associatedGMemberStats.setDraws(associatedGMemberStats.getDraws() - gameStat.getDraws());
+            associatedGMemberStats.setLoses(associatedGMemberStats.getLoses() - gameStat.getLoses());
+            associatedGMemberStats.setGoals(associatedGMemberStats.getGoals() - gameStat.getGoals());
+            associatedGMemberStats.setAssists(associatedGMemberStats.getAssists() - gameStat.getAssists());
+            associatedGMemberStats.setSaves(associatedGMemberStats.getSaves() - gameStat.getSaves());
+            associatedGMemberStats.setFouls(associatedGMemberStats.getFouls() - gameStat.getFouls());
         }
-        return null;
     }
 }

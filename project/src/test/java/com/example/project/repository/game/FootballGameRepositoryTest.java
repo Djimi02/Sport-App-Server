@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.example.project.model.game.FootballGame;
 import com.example.project.model.group.FootballGroup;
 import com.example.project.model.member.FootballMember;
+import com.example.project.model.stats.FBStats;
 import com.example.project.repository.group.FootballGroupRepository;
 import com.example.project.repository.member.FootballMemberRepository;
 
@@ -35,9 +36,9 @@ public class FootballGameRepositoryTest {
 
     @Test
     public void getGameStatsTest() {
-        List<FootballMember> stats = footballGameRepository.getGameStats(7l);
-        for (FootballMember footballMember : stats) {
-            System.out.println(footballMember.toString());
+        List<FBStats> stats = footballGameRepository.getGameStats(7l);
+        for (FBStats stat : stats) {
+            System.out.println(stat.getGoals());
         }
     }
 }

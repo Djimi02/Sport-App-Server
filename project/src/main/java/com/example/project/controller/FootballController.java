@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.project.model.game.FootballGame;
 import com.example.project.model.group.FootballGroup;
 import com.example.project.model.member.FootballMember;
+import com.example.project.model.stats.FBStats;
 import com.example.project.request.AddNewFootballGameRequest;
 import com.example.project.service.implementation.FootballService;
 
@@ -78,7 +79,7 @@ public class FootballController {
     /* Game */
 
     @GetMapping("/game/get/gamestats/{id}")
-    public List<FootballMember> getGameStats(@PathVariable(name = "id") Long gameID) {
+    public List<FBStats> getGameStats(@PathVariable(name = "id") Long gameID) {
         return footballGroupService.getGameStats(gameID);
     }
 

@@ -1,10 +1,11 @@
 package com.example.project.model.member;
 
+
+
 import com.example.project.model.Sports;
 import com.example.project.model.User;
-import com.example.project.model.game.Game;
 import com.example.project.model.group.Group;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.example.project.model.stats.Stats;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
@@ -19,13 +20,14 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import lombok.Data;
 
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Data
-public abstract class Member<GroupT extends Group<?, ?>, GameT extends Game<?>> {
+public abstract class Member<GroupT extends Group<?, ?>, StatsT extends Stats<?,?>> {
 
     @Id
     @SequenceGenerator(name = "memberSeqGen", allocationSize = 1)
@@ -34,6 +36,10 @@ public abstract class Member<GroupT extends Group<?, ?>, GameT extends Game<?>> 
 
     @Column(nullable = false)
     protected String nickname;
+
+    @JsonIgnoreProperties({ "game", "member" })
+    @OneToOne(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    protected StatsT stats;
 
     @JsonIgnoreProperties({ "members", "role", "email" })
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
@@ -45,36 +51,25 @@ public abstract class Member<GroupT extends Group<?, ?>, GameT extends Game<?>> 
     @JoinColumn(name = "group_id")
     protected GroupT group;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "game_id")
-    protected GameT game;
-
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     protected Sports sport;
 
     protected Boolean isAdmin;
 
-    protected Integer wins;
-    protected Integer draws;
-    protected Integer loses;
-
     public Member() {
         initVars();
     }
 
-    public Member(String nickname, Sports sport, GroupT group) {
+    public Member(String nickname, Sports sport, GroupT group, StatsT statsT) {
         this.nickname = nickname;
         this.sport = sport;
         this.group = group;
+        this.stats = statsT;
         initVars();
     }
 
     private void initVars() {
-        this.wins = 0;
-        this.draws = 0;
-        this.loses = 0;
         this.isAdmin = false;
     }
 

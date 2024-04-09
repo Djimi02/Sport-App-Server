@@ -6,7 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.example.project.model.member.FootballMember;
+import com.example.project.model.group.FootballGroup;
+import com.example.project.model.stats.FBStats;
 import com.example.project.repository.UserRepository;
 import com.example.project.repository.member.FootballMemberRepository;
 import com.example.project.service.implementation.FootballService;
@@ -28,6 +29,12 @@ public class FootballServiceTest {
         String groupName = "test name";
         Long userID = 2l;
         footballGroupService.saveFootballGroup(groupName, userID);
+    }
+
+    @Test
+    public void getGroup() {
+        Long groupID = 1l;
+        FootballGroup footballGroupByID = footballGroupService.findFootballGroupByID(groupID);
     }
 
     @Test
@@ -55,9 +62,9 @@ public class FootballServiceTest {
 
     @Test
     public void getGameStatsTest() {
-        List<FootballMember> stats = footballGroupService.getGameStats(1l);
-        for (FootballMember footballMember : stats) {
-            System.out.println(footballMember.getNickname());
+        List<FBStats> stats = footballGroupService.getGameStats(1l);
+        for (FBStats stat : stats) {
+            System.out.println(stat.getGoals());
         }
     }
 

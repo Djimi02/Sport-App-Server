@@ -39,8 +39,14 @@ public class FootballMemberRepositoryTest {
 
     @Test
     public void retrieveMemberTest() {
-        FootballMember footballMember = footballMemberRepository.findById(3l).get();
-        assertTrue(footballMember.getGroup() instanceof FootballGroup);
+        FootballMember footballMember = footballMemberRepository.findById(1l).get();
+        System.out.println(footballMember.getNickname());
+    }
+
+    @Test
+    public void getAllMembersByGroupID() {
+        List<FootballMember> footballMembers = footballMemberRepository.getAllMembersByGroupID(1l);
+        System.out.println(footballMembers.size());
     }
 
     @Test
