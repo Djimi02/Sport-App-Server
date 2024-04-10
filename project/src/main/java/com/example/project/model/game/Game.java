@@ -35,7 +35,6 @@ public abstract class Game<GroupT extends Group<?, ?>> {
     protected LocalDate date;
 
     protected String results;
-    private Integer victory = null; // -1 -> team 1 won, 0 -> draw, 1 -> team 2 won
 
     @JsonIgnoreProperties({ "games", "members" })
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
@@ -53,7 +52,6 @@ public abstract class Game<GroupT extends Group<?, ?>> {
         this.date = date;
         this.sport = sport;
         this.group = group;
-        this.victory = null;
     }
 
 }

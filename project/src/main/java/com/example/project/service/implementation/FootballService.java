@@ -174,7 +174,6 @@ public class FootballService {
         Calendar calendar = Calendar.getInstance();
         FootballGame newGame = new FootballGame(LocalDate.of(calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH)), group);
-        newGame.setVictory(request.getVictory());
         newGame.setResults(createResults(new ArrayList<>(request.getGameStats().values())));
         newGame = footballGameRepository.save(newGame);
 
