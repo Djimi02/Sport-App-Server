@@ -101,9 +101,12 @@ public class FootballService {
         return newMember;
     }
 
+    @Transactional
     public void removeMemberFromGroup(Long memberID) {
         footballMemberRepository.findById(memberID)
             .orElseThrow(() -> new IllegalArgumentException("Member with id = " + memberID + " does not exist!"));
+
+        fbStatsRepository.setStatsToMemberReferencesToNull(memberID);
 
         footballMemberRepository.deleteById(memberID);
     }
@@ -209,7 +212,7 @@ public class FootballService {
             .orElseThrow(() -> new IllegalAccessError("Game with id = " + gameID + " does not exists!"));
 
         List<FBStats> gameStats = getGameStats(gameID);
-        decreaseMemberStatsAfterGameDeleted(game, gameStats);
+        decreaseMemberStatsAfterGameDeleted(gameStats);
 
         for (FBStats gameStat : gameStats) {
             fbStatsRepository.delete(gameStat);
@@ -218,8 +221,11 @@ public class FootballService {
         footballGameRepository.delete(game);
     }
 
-    private void decreaseMemberStatsAfterGameDeleted(FootballGame game, List<FBStats> gameStats) {
+    private void decreaseMemberStatsAfterGameDeleted(List<FBStats> gameStats) {
         for (FBStats gameStat : gameStats) {
+            if (gameStat.getMember() == null) {
+                continue;
+            }
             FBStats associatedGMemberStats = gameStat.getMember().getStats();
 
             associatedGMemberStats.setWins(associatedGMemberStats.getWins() - gameStat.getWins());

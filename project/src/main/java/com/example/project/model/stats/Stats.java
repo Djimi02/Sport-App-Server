@@ -18,7 +18,6 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import lombok.Getter;
 import lombok.Setter;
@@ -34,6 +33,8 @@ public abstract class Stats<MemberT extends Member<?,?>, GameT extends Game<?>> 
     @GeneratedValue(generator = "statsSeqGen")
     protected Long id;
 
+    protected String memberName;
+
     protected Integer wins;
     protected Integer draws;
     protected Integer loses;
@@ -43,8 +44,8 @@ public abstract class Stats<MemberT extends Member<?,?>, GameT extends Game<?>> 
     @JoinColumn(name = "game_id")
     protected GameT game;
 
-    @JsonIgnoreProperties({ "stats", "user", "group", "sport", "isAdmin" })
-    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    @JsonIgnoreProperties({ "nickname", "stats", "user", "group", "sport", "isAdmin" })
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     @JoinColumn(name = "member_id")
     protected MemberT member;
 

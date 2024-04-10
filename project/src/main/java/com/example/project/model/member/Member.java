@@ -37,8 +37,9 @@ public abstract class Member<GroupT extends Group<?, ?>, StatsT extends Stats<?,
     @Column(nullable = false)
     protected String nickname;
 
-    @JsonIgnoreProperties({ "game", "member" })
-    @OneToOne(mappedBy = "member", cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    @JsonIgnoreProperties({ "game" })
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "stats_id")
     protected StatsT stats;
 
     @JsonIgnoreProperties({ "members", "role", "email" })
