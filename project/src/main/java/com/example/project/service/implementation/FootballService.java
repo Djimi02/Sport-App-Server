@@ -75,10 +75,19 @@ public class FootballService {
         return footballGroup;
     }
 
+    @Transactional
     public void deleteFootballGroup(long groupID) {
-        footballGroupRepository.findById(groupID)
-            	.orElseThrow(() -> new IllegalArgumentException("Group with id = " + groupID + " does not exist!"));      
+        FootballGroup groupToBeDeleted = footballGroupRepository.findById(groupID)
+            	.orElseThrow(() -> new IllegalArgumentException("Group with id = " + groupID + " does not exist!"));
+
+        for (FootballMember member : groupToBeDeleted.getMembers()) {
+            // setting reference to stats null so it doesnt complain about constraints
+            member.setStats(null);
+            // deleting all stats refering to the member
+            fbStatsRepository.deleteStatsMappingToMember(member.getId());
+        }
         
+        // this will delete the members and games also
         footballGroupRepository.deleteById(groupID);
     }
 

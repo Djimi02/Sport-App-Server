@@ -15,4 +15,8 @@ public interface FBStatsRepository extends JpaRepository<FBStats, Long> {
     @Query(nativeQuery = true, value = "UPDATE FBStats SET member_id = NULL WHERE member_id = :memberID")
     public void setStatsToMemberReferencesToNull(@Param("memberID") long memberID);
 
+    @Modifying
+    @Query(nativeQuery = true, value = "DELETE FROM FBStats s WHERE s.member_id = :memberID")
+    public void deleteStatsMappingToMember(@Param("memberID") long memberID);
+
 }
