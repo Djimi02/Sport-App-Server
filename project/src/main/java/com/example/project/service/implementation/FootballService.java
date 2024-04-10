@@ -48,6 +48,7 @@ public class FootballService {
         newMember.setUser(user);
         newMember.setIsAdmin(true);
         newMember.getStats().setMember(newMember);
+        newMember.getStats().setMemberName(user.getUserName());
         newMember = footballMemberRepository.save(newMember);
 
         savedGroup.addMember(newMember);
@@ -152,6 +153,8 @@ public class FootballService {
         newMember.setUser(user);
         newMember.setGroup(group);
         newMember.setNickname(user.getUserName());
+        newMember.getStats().setMember(newMember);
+        newMember.getStats().setMemberName(newMember.getNickname());
         newMember = footballMemberRepository.save(newMember);
 
         return newMember;
@@ -233,6 +236,7 @@ public class FootballService {
         List<FBStats> gameStats = getGameStats(gameID);
         decreaseMemberStatsAfterGameDeleted(gameStats);
 
+        // delete stats referencing to that game
         for (FBStats gameStat : gameStats) {
             fbStatsRepository.delete(gameStat);
         }

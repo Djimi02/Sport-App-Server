@@ -45,7 +45,7 @@ public abstract class Stats<MemberT extends Member<?,?>, GameT extends Game<?>> 
     protected GameT game;
 
     @JsonIgnoreProperties({ "nickname", "stats", "user", "group", "sport", "isAdmin" })
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
     @JoinColumn(name = "member_id")
     protected MemberT member;
 

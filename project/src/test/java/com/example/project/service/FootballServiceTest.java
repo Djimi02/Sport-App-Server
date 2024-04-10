@@ -75,7 +75,7 @@ public class FootballServiceTest {
 
     @Test
     public void deleteGame() {
-        footballGroupService.deleteFootballGame(1L);
+        footballGroupService.deleteFootballGame(4L);
     }
 
     @Test
