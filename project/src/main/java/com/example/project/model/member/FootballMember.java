@@ -16,6 +16,7 @@ public class FootballMember extends Member<FootballGroup, FBStats> {
 
     public FootballMember() {
         setSport(Sports.FOOTBALL);
+        setStats(new FBStats());
     }
 
     public FootballMember(String nickname, FootballGroup group) {
