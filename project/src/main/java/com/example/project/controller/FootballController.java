@@ -76,6 +76,16 @@ public class FootballController {
         footballGroupService.removeMemberFromGroup(memberID);
     }
 
+    @PostMapping("/member/promote/{id}")
+    public void promoteMemberToAdmin(@PathVariable(name = "id") Long memberID) {
+        footballGroupService.promoteMemberToAdmin(memberID);
+    }
+
+    @PostMapping("/member/demote/{id}")
+    public void demoteMember(@PathVariable(name = "id") Long memberID) {
+        footballGroupService.demoteMember(memberID);
+    }
+
     /* Game */
 
     @GetMapping("/game/get/gamestats/{id}")

@@ -160,6 +160,22 @@ public class FootballService {
         return newMember;
     }
 
+    @Transactional
+    public void promoteMemberToAdmin(long memberID) {
+        FootballMember member = footballMemberRepository.findById(memberID)
+            .orElseThrow(() -> new IllegalArgumentException("Member with id = " + memberID + " does not exist!"));
+
+        member.setIsAdmin(true);
+    }
+
+    @Transactional
+    public void demoteMember(long memberID) {
+        FootballMember member = footballMemberRepository.findById(memberID)
+            .orElseThrow(() -> new IllegalArgumentException("Member with id = " + memberID + " does not exist!"));
+
+        member.setIsAdmin(false);
+    }
+
     /* Game */
 
     @Transactional
