@@ -1,4 +1,4 @@
-package com.example.project.model.member;
+package com.example.project.repository.member;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -12,9 +12,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.example.project.model.User;
 import com.example.project.model.group.FootballGroup;
+import com.example.project.model.member.FootballMember;
 import com.example.project.repository.UserRepository;
 import com.example.project.repository.group.FootballGroupRepository;
-import com.example.project.repository.member.FootballMemberRepository;
 
 @SpringBootTest
 public class FootballMemberRepositoryTest {

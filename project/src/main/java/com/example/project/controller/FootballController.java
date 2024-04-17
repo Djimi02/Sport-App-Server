@@ -14,7 +14,7 @@ import com.example.project.model.game.FootballGame;
 import com.example.project.model.group.FootballGroup;
 import com.example.project.model.member.FootballMember;
 import com.example.project.model.stats.FBStats;
-import com.example.project.request.AddNewFootballGameRequest;
+import com.example.project.request.addNewGameRequests.AddNewFBGameRequest;
 import com.example.project.service.implementation.FootballService;
 
 import lombok.AllArgsConstructor;
@@ -94,7 +94,7 @@ public class FootballController {
     }
 
     @PostMapping("/game/save")
-    public FootballGame addNewGame(@RequestBody AddNewFootballGameRequest request) {
+    public FootballGame addNewGame(@RequestBody AddNewFBGameRequest request) {
         FootballGame output = footballGroupService.addNewGame(request);
         output.setGroup(null);
         return output;

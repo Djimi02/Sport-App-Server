@@ -19,7 +19,7 @@ import com.example.project.repository.game.FootballGameRepository;
 import com.example.project.repository.group.FootballGroupRepository;
 import com.example.project.repository.member.FootballMemberRepository;
 import com.example.project.repository.stats.FBStatsRepository;
-import com.example.project.request.AddNewFootballGameRequest;
+import com.example.project.request.addNewGameRequests.AddNewFBGameRequest;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -179,7 +179,7 @@ public class FootballService {
     /* Game */
 
     @Transactional
-    public FootballGame addNewGame(AddNewFootballGameRequest request) {
+    public FootballGame addNewGame(AddNewFBGameRequest request) {
 
         // Retrieve group
         FootballGroup group = footballGroupRepository.findById(request.getGroupID())

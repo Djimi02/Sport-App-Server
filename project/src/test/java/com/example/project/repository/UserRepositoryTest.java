@@ -1,4 +1,4 @@
-package com.example.project.model;
+package com.example.project.repository;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.example.project.repository.UserRepository;
+import com.example.project.model.User;
 
 @SpringBootTest
 public class UserRepositoryTest {
