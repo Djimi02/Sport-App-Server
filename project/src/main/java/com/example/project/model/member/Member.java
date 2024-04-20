@@ -1,7 +1,6 @@
 package com.example.project.model.member;
 
-
-
+import com.example.project.model.MemberRole;
 import com.example.project.model.Sports;
 import com.example.project.model.User;
 import com.example.project.model.group.Group;
@@ -56,7 +55,8 @@ public abstract class Member<GroupT extends Group<?, ?>, StatsT extends Stats<?,
     @Enumerated(EnumType.STRING)
     protected Sports sport;
 
-    protected Boolean isAdmin;
+    @Enumerated(EnumType.STRING)
+    protected MemberRole role;
 
     public Member() {
         initVars();
@@ -71,7 +71,6 @@ public abstract class Member<GroupT extends Group<?, ?>, StatsT extends Stats<?,
     }
 
     private void initVars() {
-        this.isAdmin = false;
     }
 
 }

@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import com.example.project.model.MemberRole;
 import com.example.project.model.User;
 import com.example.project.model.game.FootballGame;
 import com.example.project.model.group.FootballGroup;
@@ -46,7 +47,7 @@ public class FootballService {
 
         FootballMember newMember = new FootballMember(user.getUserName(), savedGroup);
         newMember.setUser(user);
-        newMember.setIsAdmin(true);
+        newMember.setRole(MemberRole.GROUP_ADMIN);
         newMember.getStats().setMember(newMember);
         newMember.getStats().setMemberName(user.getUserName());
         newMember = footballMemberRepository.save(newMember);
@@ -105,7 +106,7 @@ public class FootballService {
         }
 
         FootballMember newMember = new FootballMember(memberNickname, footballGroup);
-        newMember.setIsAdmin(false);
+        newMember.setRole(MemberRole.MEMBER);
         newMember.getStats().setMember(newMember);
         newMember.getStats().setMemberName(memberNickname);
         newMember = footballMemberRepository.save(newMember);
@@ -153,6 +154,7 @@ public class FootballService {
         newMember.setUser(user);
         newMember.setGroup(group);
         newMember.setNickname(user.getUserName());
+        newMember.setRole(MemberRole.MEMBER);
         newMember.getStats().setMember(newMember);
         newMember.getStats().setMemberName(newMember.getNickname());
         newMember = footballMemberRepository.save(newMember);
@@ -161,19 +163,27 @@ public class FootballService {
     }
 
     @Transactional
-    public void promoteMemberToAdmin(long memberID) {
+    public void setRoleToAdmin(long memberID) {
         FootballMember member = footballMemberRepository.findById(memberID)
             .orElseThrow(() -> new IllegalArgumentException("Member with id = " + memberID + " does not exist!"));
 
-        member.setIsAdmin(true);
+        member.setRole(MemberRole.GROUP_ADMIN);
     }
 
     @Transactional
-    public void demoteMember(long memberID) {
+    public void setRoleToGameMaker(long memberID) {
         FootballMember member = footballMemberRepository.findById(memberID)
             .orElseThrow(() -> new IllegalArgumentException("Member with id = " + memberID + " does not exist!"));
 
-        member.setIsAdmin(false);
+        member.setRole(MemberRole.GAME_MAKER);
+    }
+
+    @Transactional
+    public void setRoleToMember(long memberID) {
+        FootballMember member = footballMemberRepository.findById(memberID)
+            .orElseThrow(() -> new IllegalArgumentException("Member with id = " + memberID + " does not exist!"));
+
+        member.setRole(MemberRole.MEMBER);
     }
 
     /* Game */

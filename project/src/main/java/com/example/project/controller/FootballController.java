@@ -76,14 +76,19 @@ public class FootballController {
         footballGroupService.removeMemberFromGroup(memberID);
     }
 
-    @PostMapping("/member/promote/{id}")
-    public void promoteMemberToAdmin(@PathVariable(name = "id") Long memberID) {
-        footballGroupService.promoteMemberToAdmin(memberID);
+    @PostMapping("/member/role/admin/{id}")
+    public void setRoleToAdmin(@PathVariable(name = "id") Long memberID) {
+        footballGroupService.setRoleToAdmin(memberID);
     }
 
-    @PostMapping("/member/demote/{id}")
-    public void demoteMember(@PathVariable(name = "id") Long memberID) {
-        footballGroupService.demoteMember(memberID);
+    @PostMapping("/member/role/gamemaker/{id}")
+    public void setRoleToGameMaker(@PathVariable(name = "id") Long memberID) {
+        footballGroupService.setRoleToGameMaker(memberID);
+    }
+
+    @PostMapping("/member/role/member/{id}")
+    public void setRoleToMember(@PathVariable(name = "id") Long memberID) {
+        footballGroupService.setRoleToMember(memberID);
     }
 
     /* Game */
