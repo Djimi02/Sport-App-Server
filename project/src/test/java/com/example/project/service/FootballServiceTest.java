@@ -28,19 +28,19 @@ public class FootballServiceTest {
     public void saveGroup() {
         String groupName = "test name";
         Long userID = 2l;
-        footballGroupService.saveFootballGroup(groupName, userID);
+        footballGroupService.saveGroup(groupName, userID);
     }
 
     @Test
     public void getGroup() {
         Long groupID = 1l;
-        FootballGroup footballGroupByID = footballGroupService.findFootballGroupByID(groupID);
+        FootballGroup footballGroupByID = footballGroupService.findGroupByID(groupID);
     }
 
     @Test
     public void updateGroupNameTest() {
         Long id = 1l;
-        footballGroupService.updateFootballGroupName(id, "mosoma2");
+        footballGroupService.updateGroupName(id, "mosoma2");
     }
 
     @Test
@@ -70,12 +70,12 @@ public class FootballServiceTest {
 
     @Test
     public void deleteGroup() {
-        footballGroupService.deleteFootballGroup(1);
+        footballGroupService.deleteGroup(1);
     }
 
     @Test
     public void deleteGame() {
-        footballGroupService.deleteFootballGame(4L);
+        footballGroupService.deleteGame(4L);
     }
 
     @Test
