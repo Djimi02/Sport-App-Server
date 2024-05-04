@@ -30,7 +30,7 @@ public class FootballController {
 
     @GetMapping("/group/get/{id}")
     public FootballGroup getFootballGroupByID(@PathVariable(name = "id") Long groupID) {
-        return footballGroupService.findFootballGroupByID(groupID);
+        return footballGroupService.findGroupByID(groupID);
     }
 
     @GetMapping("/group/get/uuid/{uuid}")
@@ -41,7 +41,7 @@ public class FootballController {
     @PostMapping("/group/save/{name}/{userid}")
     public FootballGroup createFootballGroup(@PathVariable(name = "name") String name,
             @PathVariable(name = "userid") Long userID) {
-        return footballGroupService.saveFootballGroup(name, userID);
+        return footballGroupService.saveGroup(name, userID);
     }
 
     @PostMapping("/group/join/notnew/{userid}/{memberid}")
@@ -58,7 +58,7 @@ public class FootballController {
 
     @DeleteMapping("/group/delete/{id}")
     public void deleteGroup(@PathVariable(name = "id") Long groupID) {
-        footballGroupService.deleteFootballGroup(groupID);
+        footballGroupService.deleteGroup(groupID);
     }
 
     /* Member */
@@ -107,6 +107,6 @@ public class FootballController {
 
     @DeleteMapping("/game/delete/{id}")
     public void deleteGame(@PathVariable(name = "id") Long gameID) {
-        footballGroupService.deleteFootballGame(gameID);
+        footballGroupService.deleteGame(gameID);
     }
 }

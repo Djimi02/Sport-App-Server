@@ -29,18 +29,18 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class FootballService {
 
-    private FootballGroupRepository footballGroupRepository;
-    private FootballMemberRepository footballMemberRepository;
     private UserRepository userRepository;
-    private FootballGameRepository footballGameRepository;
-    private FBStatsRepository fbStatsRepository;
+    private FootballGroupRepository groupRepository;
+    private FootballMemberRepository memberRepository;
+    private FootballGameRepository gameRepository;
+    private FBStatsRepository statsRepository;
 
     /* GROUP */
 
     @Transactional
-    public FootballGroup saveFootballGroup(String name, Long userID) {
+    public FootballGroup saveGroup(String name, Long userID) {
         FootballGroup group = new FootballGroup(name);
-        FootballGroup savedGroup = footballGroupRepository.save(group);
+        FootballGroup savedGroup = groupRepository.save(group);
 
         User user = userRepository.findById(userID)
                 .orElseThrow(() -> new IllegalArgumentException("User with id= " + userID + " does not exist!"));
@@ -50,26 +50,26 @@ public class FootballService {
         newMember.setRole(MemberRole.GROUP_ADMIN);
         newMember.getStats().setMember(newMember);
         newMember.getStats().setMemberName(user.getUserName());
-        newMember = footballMemberRepository.save(newMember);
+        newMember = memberRepository.save(newMember);
 
         savedGroup.addMember(newMember);
 
         return savedGroup;
     }
 
-    public FootballGroup findFootballGroupByID(Long groupID) {
-        return footballGroupRepository.findById(groupID)
+    public FootballGroup findGroupByID(Long groupID) {
+        return groupRepository.findById(groupID)
                 .orElseThrow(() -> new IllegalArgumentException("Group with id = " + groupID + " does not exist!"));
     }
 
     public FootballGroup findGroupByUUID(String uuidStr) {
         UUID uuid = UUID.fromString(uuidStr);
-        return footballGroupRepository.findByUuid(uuid);
+        return groupRepository.findByUuid(uuid);
     }
 
     @Transactional
-    public FootballGroup updateFootballGroupName(Long groupID, String newName) {
-        FootballGroup footballGroup = footballGroupRepository.findById(groupID)
+    public FootballGroup updateGroupName(Long groupID, String newName) {
+        FootballGroup footballGroup = groupRepository.findById(groupID)
                 .orElseThrow(() -> new IllegalArgumentException("Group with id = " + groupID + " does not exist!"));
 
         footballGroup.setName(newName);
@@ -78,29 +78,29 @@ public class FootballService {
     }
 
     @Transactional
-    public void deleteFootballGroup(long groupID) {
-        FootballGroup groupToBeDeleted = footballGroupRepository.findById(groupID)
+    public void deleteGroup(long groupID) {
+        FootballGroup groupToBeDeleted = groupRepository.findById(groupID)
                 .orElseThrow(() -> new IllegalArgumentException("Group with id = " + groupID + " does not exist!"));
 
         for (FootballMember member : groupToBeDeleted.getMembers()) {
             // setting reference to stats null so it doesnt complain about constraints
             member.setStats(null);
             // deleting all stats refering to the member
-            fbStatsRepository.deleteStatsMappingToMember(member.getId());
+            statsRepository.deleteStatsMappingToMember(member.getId());
         }
 
         // this will delete the members and games also
-        footballGroupRepository.deleteById(groupID);
+        groupRepository.deleteById(groupID);
     }
 
     /* Member */
 
     @Transactional
     public FootballMember createAndAddMemberToGroup(Long groupID, String memberNickname) {
-        FootballGroup footballGroup = footballGroupRepository.findById(groupID)
+        FootballGroup footballGroup = groupRepository.findById(groupID)
                 .orElseThrow(() -> new IllegalArgumentException("Group with id = " + groupID + " does not exist!"));
 
-        if (footballMemberRepository.existsByNameAndGroup(memberNickname, groupID)) {
+        if (memberRepository.existsByNameAndGroup(memberNickname, groupID)) {
             throw new IllegalArgumentException(
                     "Member with name = " + memberNickname + " already exists in the group!");
         }
@@ -109,19 +109,19 @@ public class FootballService {
         newMember.setRole(MemberRole.MEMBER);
         newMember.getStats().setMember(newMember);
         newMember.getStats().setMemberName(memberNickname);
-        newMember = footballMemberRepository.save(newMember);
+        newMember = memberRepository.save(newMember);
 
         return newMember;
     }
 
     @Transactional
     public void removeMemberFromGroup(Long memberID) {
-        footballMemberRepository.findById(memberID)
+        memberRepository.findById(memberID)
                 .orElseThrow(() -> new IllegalArgumentException("Member with id = " + memberID + " does not exist!"));
 
-        fbStatsRepository.setStatsMemberReferencesToNull(memberID);
+        statsRepository.setStatsMemberReferencesToNull(memberID);
 
-        footballMemberRepository.deleteById(memberID);
+        memberRepository.deleteById(memberID);
     }
 
     @Transactional
@@ -131,7 +131,7 @@ public class FootballService {
                     throw new IllegalArgumentException("User with id = " + userID + " does not exists!");
                 });
 
-        FootballMember member = footballMemberRepository.findById(memberID)
+        FootballMember member = memberRepository.findById(memberID)
                 .orElseThrow(() -> {
                     throw new IllegalArgumentException("Member with id = " + memberID + " does not exists!");
                 });
@@ -145,7 +145,7 @@ public class FootballService {
                     throw new IllegalArgumentException("User with id = " + userID + " does not exists!");
                 });
 
-        FootballGroup group = footballGroupRepository.findById(groupID)
+        FootballGroup group = groupRepository.findById(groupID)
                 .orElseThrow(() -> {
                     throw new IllegalArgumentException("Member with id = " + groupID + " does not exists!");
                 });
@@ -157,14 +157,14 @@ public class FootballService {
         newMember.setRole(MemberRole.MEMBER);
         newMember.getStats().setMember(newMember);
         newMember.getStats().setMemberName(newMember.getNickname());
-        newMember = footballMemberRepository.save(newMember);
+        newMember = memberRepository.save(newMember);
 
         return newMember;
     }
 
     @Transactional
     public void setRoleToAdmin(long memberID) {
-        FootballMember member = footballMemberRepository.findById(memberID)
+        FootballMember member = memberRepository.findById(memberID)
             .orElseThrow(() -> new IllegalArgumentException("Member with id = " + memberID + " does not exist!"));
 
         member.setRole(MemberRole.GROUP_ADMIN);
@@ -172,7 +172,7 @@ public class FootballService {
 
     @Transactional
     public void setRoleToGameMaker(long memberID) {
-        FootballMember member = footballMemberRepository.findById(memberID)
+        FootballMember member = memberRepository.findById(memberID)
             .orElseThrow(() -> new IllegalArgumentException("Member with id = " + memberID + " does not exist!"));
 
         member.setRole(MemberRole.GAME_MAKER);
@@ -180,7 +180,7 @@ public class FootballService {
 
     @Transactional
     public void setRoleToMember(long memberID) {
-        FootballMember member = footballMemberRepository.findById(memberID)
+        FootballMember member = memberRepository.findById(memberID)
             .orElseThrow(() -> new IllegalArgumentException("Member with id = " + memberID + " does not exist!"));
 
         member.setRole(MemberRole.MEMBER);
@@ -192,7 +192,7 @@ public class FootballService {
     public FootballGame addNewGame(AddNewFBGameRequest request) {
 
         // Retrieve group
-        FootballGroup group = footballGroupRepository.findById(request.getGroupID())
+        FootballGroup group = groupRepository.findById(request.getGroupID())
                 .orElseThrow(() -> new IllegalArgumentException(
                         "Group with id = " + request.getGroupID() + " does not exist!"));
 
@@ -201,13 +201,13 @@ public class FootballService {
         FootballGame newGame = new FootballGame(LocalDate.of(calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH)), group);
         newGame.setResults(createResults(new ArrayList<>(request.getGameStats().values())));
-        newGame = footballGameRepository.save(newGame);
+        newGame = gameRepository.save(newGame);
 
         // Save game member stats and update the actual members with the new stats
         for (Long memberID : request.getGameStats().keySet()) {
             FBStats gameStats = request.getGameStats().get(memberID);
 
-            FootballMember dbMember = footballMemberRepository.findById(memberID)
+            FootballMember dbMember = memberRepository.findById(memberID)
                     .orElseThrow(() -> new IllegalArgumentException("Such member does not exists!"));
             FBStats dbMemberStats = dbMember.getStats();
 
@@ -221,7 +221,7 @@ public class FootballService {
 
             gameStats.setMember(dbMember);
             gameStats.setGame(newGame);
-            fbStatsRepository.save(gameStats);
+            statsRepository.save(gameStats);
         }
 
         return newGame;
@@ -246,16 +246,16 @@ public class FootballService {
     }
 
     public List<FBStats> getGameStats(Long gameID) {
-        Optional<FootballGame> game = footballGameRepository.findById(gameID);
+        Optional<FootballGame> game = gameRepository.findById(gameID);
         if (game.isEmpty()) {
             throw new IllegalAccessError("Game with id = " + gameID + " does not exists!");
         }
-        return footballGameRepository.getGameStats(gameID);
+        return gameRepository.getGameStats(gameID);
     }
 
     @Transactional
-    public void deleteFootballGame(Long gameID) {
-        FootballGame game = footballGameRepository.findById(gameID)
+    public void deleteGame(Long gameID) {
+        FootballGame game = gameRepository.findById(gameID)
                 .orElseThrow(() -> new IllegalAccessError("Game with id = " + gameID + " does not exists!"));
 
         List<FBStats> gameStats = getGameStats(gameID);
@@ -263,10 +263,10 @@ public class FootballService {
 
         // delete stats referencing to that game
         for (FBStats gameStat : gameStats) {
-            fbStatsRepository.delete(gameStat);
+            statsRepository.delete(gameStat);
         }
 
-        footballGameRepository.delete(game);
+        gameRepository.delete(game);
     }
 
     private void decreaseMemberStatsAfterGameDeleted(List<FBStats> gameStats) {
