@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public abstract class AddNewGameRequestAbstract<StatsT extends Stats<?,?>> {
+public abstract class AddNewGameRequest<StatsT extends Stats<?,?>> {
     private Map<Long, StatsT> gameStats; // key is member id and value is member stats
     private Long groupID;
 }

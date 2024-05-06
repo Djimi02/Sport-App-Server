@@ -17,6 +17,7 @@ public class BBStats extends Stats<BasketballMember, BasketballGame> {
     
     private int points;
     private int numberOfThreePoints;
+    private int numOfDunks;
     private int blocks;
     private int fouls;
     private Boolean isPartOfTeam1; // used for games
@@ -31,6 +32,7 @@ public class BBStats extends Stats<BasketballMember, BasketballGame> {
         this.numberOfThreePoints = 0;
         this.blocks = 0;
         this.fouls = 0;
+        this.numOfDunks = 0;
     }
 
 }
