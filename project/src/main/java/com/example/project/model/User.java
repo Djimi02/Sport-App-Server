@@ -17,12 +17,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "AppUser")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class User {
     
@@ -47,7 +49,7 @@ public class User {
 
     @JsonIgnoreProperties({"user", "games"})
     @OneToMany(mappedBy="user", fetch = FetchType.EAGER)
-    private List<Member<?,?>> members;
+    private List<Member> members;
 
     public User(String userName, String email, String password) {
         this.userName = userName;

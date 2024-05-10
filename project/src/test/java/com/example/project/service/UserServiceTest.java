@@ -63,6 +63,6 @@ public class UserServiceTest {
     void testRetrieveUser() {
         User user = userRepository.findById(3l).get();
         System.out.println("MEMBERS COUNT = " + user.getMembers().size());
-        System.out.println("GROUP NAME = " + user.getMembers().get(0).getGroup().getName());
+        // System.out.println("GROUP NAME = " + user.getMembers().get(0).getGroup().getName());
     }
 }

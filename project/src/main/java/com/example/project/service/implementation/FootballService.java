@@ -1,8 +1,6 @@
 package com.example.project.service.implementation;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -39,13 +37,16 @@ public class FootballService {
 
     @Transactional
     public FootballGroup saveGroup(String name, Long userID) {
-        FootballGroup group = new FootballGroup(name);
+        FootballGroup group = new FootballGroup();
+        group.setName(name);
         FootballGroup savedGroup = groupRepository.save(group);
 
         User user = userRepository.findById(userID)
                 .orElseThrow(() -> new IllegalArgumentException("User with id= " + userID + " does not exist!"));
 
-        FootballMember newMember = new FootballMember(user.getUserName(), savedGroup);
+        FootballMember newMember = new FootballMember();
+        newMember.setNickname(user.getUserName());
+        newMember.setGroup(savedGroup);
         newMember.setUser(user);
         newMember.setRole(MemberRole.GROUP_ADMIN);
         newMember.getStats().setMember(newMember);
@@ -97,7 +98,7 @@ public class FootballService {
 
     @Transactional
     public FootballMember createAndAddMemberToGroup(Long groupID, String memberNickname) {
-        FootballGroup footballGroup = groupRepository.findById(groupID)
+        FootballGroup group = groupRepository.findById(groupID)
                 .orElseThrow(() -> new IllegalArgumentException("Group with id = " + groupID + " does not exist!"));
 
         if (memberRepository.existsByNameAndGroup(memberNickname, groupID)) {
@@ -105,7 +106,9 @@ public class FootballService {
                     "Member with name = " + memberNickname + " already exists in the group!");
         }
 
-        FootballMember newMember = new FootballMember(memberNickname, footballGroup);
+        FootballMember newMember = new FootballMember();
+        newMember.setNickname(memberNickname);
+        newMember.setGroup(group);
         newMember.setRole(MemberRole.MEMBER);
         newMember.getStats().setMember(newMember);
         newMember.getStats().setMemberName(memberNickname);
@@ -197,9 +200,8 @@ public class FootballService {
                         "Group with id = " + request.getGroupID() + " does not exist!"));
 
         // Create new game
-        Calendar calendar = Calendar.getInstance();
-        FootballGame newGame = new FootballGame(LocalDate.of(calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH)), group);
+        FootballGame newGame = new FootballGame();
+        newGame.setGroup(group);
         newGame.setResults(createResults(new ArrayList<>(request.getGameStats().values())));
         newGame = gameRepository.save(newGame);
 

@@ -1,8 +1,6 @@
 package com.example.project.service.implementation;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -41,13 +39,16 @@ public class BasketballService {
     
     @Transactional
     public BasketballGroup saveGroup(String name, Long userID) {
-        BasketballGroup group = new BasketballGroup(name);
+        BasketballGroup group = new BasketballGroup();
+        group.setName(name);
         BasketballGroup savedGroup = groupRepository.save(group);
 
         User user = userRepository.findById(userID)
                 .orElseThrow(() -> new IllegalArgumentException("User with id= " + userID + " does not exist!"));
 
-        BasketballMember newMember = new BasketballMember(user.getUserName(), savedGroup);
+        BasketballMember newMember = new BasketballMember();
+        newMember.setNickname(user.getUserName());
+        newMember.setGroup(savedGroup);
         newMember.setUser(user);
         newMember.setRole(MemberRole.GROUP_ADMIN);
         newMember.getStats().setMember(newMember);
@@ -107,7 +108,9 @@ public class BasketballService {
                     "Member with name = " + memberNickname + " already exists in the group!");
         }
 
-        BasketballMember newMember = new BasketballMember(memberNickname, group);
+        BasketballMember newMember = new BasketballMember();
+        newMember.setNickname(memberNickname);
+        newMember.setGroup(group);
         newMember.setRole(MemberRole.MEMBER);
         newMember.getStats().setMember(newMember);
         newMember.getStats().setMemberName(memberNickname);
@@ -199,9 +202,8 @@ public class BasketballService {
                         "Group with id = " + request.getGroupID() + " does not exist!"));
 
         // Create new game
-        Calendar calendar = Calendar.getInstance();
-        BasketballGame newGame = new BasketballGame(LocalDate.of(calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH)), group);
+        BasketballGame newGame = new BasketballGame();
+        newGame.setGroup(group);
         newGame.setResults(createResults(new ArrayList<>(request.getGameStats().values())));
         newGame = gameRepository.save(newGame);
 

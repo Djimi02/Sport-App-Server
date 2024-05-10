@@ -32,7 +32,9 @@ public class FootballMemberRepositoryTest {
         User user = userRepository.findById(1l).get();
         FootballGroup group = groupRepository.findById(1l).get();
         String username = "mishel";
-        FootballMember member = new FootballMember(username, group);
+        FootballMember member = new FootballMember();
+        member.setNickname(username);
+        member.setGroup(group);
         member.setUser(user);
         footballMemberRepository.save(member);
     }
