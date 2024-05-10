@@ -35,9 +35,10 @@ public class BasketballMember extends Member {
         this.stats = new BBStats();
     }
 
-    @PostLoad
-    private void postLoad(){
-        this.groupAbs = this.group;
-    }
+    // @PostLoad
+    // private void postLoad(){
+    //     this.groupAbs = this.group;
+    //     this.statsAbs = this.stats;
+    // }
 
 }

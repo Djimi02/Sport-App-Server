@@ -36,8 +36,9 @@ public class FootballMember extends Member {
         this.stats = new FBStats();
     }
 
-    @PostLoad
-    private void postLoad(){
-        this.groupAbs = this.group;
-    }
+    // @PostLoad
+    // private void postLoad(){
+    //     this.groupAbs = this.group;
+    //     this.statsAbs = this.stats;
+    // }
 }

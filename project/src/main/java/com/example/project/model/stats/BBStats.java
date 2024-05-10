@@ -32,7 +32,7 @@ public class BBStats extends Stats {
     @JoinColumn(name = "game_id")
     private BasketballGame game;
 
-    @JsonIgnoreProperties({ "nickname", "stats", "user", "group", "sport", "isAdmin", "groupAbs" })
+    @JsonIgnoreProperties({ "nickname", "stats", "user", "group", "sport", "isAdmin" })
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
     @JoinColumn(name = "member_id")
     private BasketballMember member;
