@@ -1,30 +1,27 @@
 package com.example.project.model.game;
 
 import java.time.LocalDate;
+import java.util.Calendar;
 
 import com.example.project.model.Sports;
-import com.example.project.model.group.Group;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@Data
-public abstract class Game<GroupT extends Group<?, ?>> {
+@Getter
+@Setter
+public abstract class Game {
 
     @Id
     @SequenceGenerator(name = "gameSeqGen", allocationSize = 1)
@@ -36,22 +33,13 @@ public abstract class Game<GroupT extends Group<?, ?>> {
 
     protected String results;
 
-    @JsonIgnoreProperties({ "games", "members" })
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "group_id", nullable = false)
-    private GroupT group;
-
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     protected Sports sport;
 
     public Game() {
-    }
-
-    public Game(LocalDate date, Sports sport, GroupT group) {
-        this.date = date;
-        this.sport = sport;
-        this.group = group;
+        Calendar calendar = Calendar.getInstance();
+        this.date = LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH));
     }
 
 }

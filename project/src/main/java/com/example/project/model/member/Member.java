@@ -3,8 +3,6 @@ package com.example.project.model.member;
 import com.example.project.model.MemberRole;
 import com.example.project.model.Sports;
 import com.example.project.model.User;
-import com.example.project.model.group.Group;
-import com.example.project.model.stats.Stats;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
@@ -19,14 +17,15 @@ import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@Data
-public abstract class Member<GroupT extends Group<?, ?>, StatsT extends Stats<?,?>> {
+@Getter
+@Setter
+public abstract class Member {
 
     @Id
     @SequenceGenerator(name = "memberSeqGen", allocationSize = 1)
@@ -36,20 +35,10 @@ public abstract class Member<GroupT extends Group<?, ?>, StatsT extends Stats<?,
     @Column(nullable = false)
     protected String nickname;
 
-    @JsonIgnoreProperties({ "game" })
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, fetch = FetchType.EAGER)
-    @JoinColumn(name = "stats_id")
-    protected StatsT stats;
-
     @JsonIgnoreProperties({ "members", "role", "email" })
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id")
     protected User user;
-
-    @JsonIgnoreProperties({ "members", "games" })
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "group_id")
-    protected GroupT group;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -58,19 +47,6 @@ public abstract class Member<GroupT extends Group<?, ?>, StatsT extends Stats<?,
     @Enumerated(EnumType.STRING)
     protected MemberRole role;
 
-    public Member() {
-        initVars();
-    }
-
-    public Member(String nickname, Sports sport, GroupT group, StatsT statsT) {
-        this.nickname = nickname;
-        this.sport = sport;
-        this.group = group;
-        this.stats = statsT;
-        initVars();
-    }
-
-    private void initVars() {
-    }
+    public Member() {}
 
 }

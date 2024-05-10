@@ -1,20 +1,29 @@
 package com.example.project.model.game;
 
-import java.time.LocalDate;
-
 import com.example.project.model.Sports;
 import com.example.project.model.group.FootballGroup;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-@NoArgsConstructor
-public class FootballGame extends Game<FootballGroup> {
+@Getter
+@Setter
+public class FootballGame extends Game {
 
-    public FootballGame(LocalDate date, FootballGroup group) {
-        super(date, Sports.FOOTBALL, group);
+    @JsonIgnoreProperties({ "games", "members" })
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "group_id", nullable = false)
+    private FootballGroup group;
 
+    public FootballGame() {
+        super.sport = Sports.FOOTBALL;
     }
 
 }
