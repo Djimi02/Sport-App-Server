@@ -11,6 +11,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PostLoad;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,6 +33,11 @@ public class BasketballMember extends Member {
     public BasketballMember() {
         super.sport = Sports.BASKETBALL;
         this.stats = new BBStats();
+    }
+
+    @PostLoad
+    private void postLoad(){
+        this.groupAbs = this.group;
     }
 
 }

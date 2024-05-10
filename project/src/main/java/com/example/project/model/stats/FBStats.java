@@ -29,7 +29,7 @@ public class FBStats extends Stats {
     @JoinColumn(name = "game_id")
     protected FootballGame game;
 
-    @JsonIgnoreProperties({ "nickname", "stats", "user", "group", "sport", "isAdmin" })
+    @JsonIgnoreProperties({ "nickname", "stats", "user", "group", "sport", "isAdmin", "groupAbs" })
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE})
     @JoinColumn(name = "member_id")
     protected FootballMember member;

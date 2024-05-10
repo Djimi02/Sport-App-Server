@@ -3,6 +3,7 @@ package com.example.project.model.member;
 import com.example.project.model.MemberRole;
 import com.example.project.model.Sports;
 import com.example.project.model.User;
+import com.example.project.model.group.Group;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
@@ -18,6 +19,7 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -46,6 +48,10 @@ public abstract class Member {
 
     @Enumerated(EnumType.STRING)
     protected MemberRole role;
+
+    @JsonIgnoreProperties({ "members", "games" })
+    @Transient
+    protected Group groupAbs;
 
     public Member() {}
 

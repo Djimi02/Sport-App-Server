@@ -20,12 +20,12 @@ import lombok.Setter;
 @Setter
 public class FootballGroup extends Group {
 
-    @JsonIgnoreProperties({ "group", "members" })
+    @JsonIgnoreProperties({ "group", "groupAbs", "members" })
     @OneToMany(mappedBy = "group", fetch = FetchType.EAGER, cascade = { CascadeType.MERGE,
             CascadeType.REMOVE }, orphanRemoval = true)
     protected List<FootballGame> games;
 
-    @JsonIgnoreProperties({ "group", "games" })
+    @JsonIgnoreProperties({ "group", "groupAbs", "games" })
     @OneToMany(mappedBy = "group", fetch = FetchType.EAGER, cascade = { CascadeType.MERGE,
             CascadeType.REMOVE }, orphanRemoval = true)
     protected List<FootballMember> members;
