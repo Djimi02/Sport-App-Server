@@ -47,7 +47,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Roles role;
 
-    @JsonIgnoreProperties({"user", "games", "group"})
+    @JsonIgnoreProperties({"user", "games"})
     @OneToMany(mappedBy="user", fetch = FetchType.EAGER)
     private List<Member> members;
 
