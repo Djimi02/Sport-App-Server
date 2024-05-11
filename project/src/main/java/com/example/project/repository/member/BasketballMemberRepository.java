@@ -18,7 +18,7 @@ public interface BasketballMemberRepository extends JpaRepository<BasketballMemb
                         "CASE\r\n" + //
                         "WHEN COUNT(m) > 0 THEN true\r\n" + //
                         "ELSE false END\r\n" + //
-                        "FROM member as m\r\n" + //
+                        "FROM basketball_member as m\r\n" + //
                         "WHERE m.nickname = :memberName AND m.group_id = :groupID"
     )
     public boolean existsByNameAndGroup(@Param("memberName") String name,@Param("groupID") Long groupID);
