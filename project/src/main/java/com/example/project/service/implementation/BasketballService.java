@@ -17,6 +17,7 @@ import com.example.project.repository.UserRepository;
 import com.example.project.repository.game.BasketballGameRepository;
 import com.example.project.repository.stats.BBStatsRepository;
 import com.example.project.request.addNewGameRequests.AddNewBBGameRequest;
+import com.example.project.service.interfaces.SportService;
 
 import jakarta.transaction.Transactional;
 
@@ -27,7 +28,7 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class BasketballService {
+public class BasketballService implements SportService<BasketballGroup, BasketballMember, BasketballGame, BBStats, AddNewBBGameRequest> {
  
     private UserRepository userRepository;
     private BasketballGroupRepository groupRepository;
@@ -37,6 +38,7 @@ public class BasketballService {
 
     /* GROUP */
     
+    @Override
     @Transactional
     public BasketballGroup saveGroup(String name, Long userID) {
         BasketballGroup group = new BasketballGroup();
@@ -60,16 +62,19 @@ public class BasketballService {
         return savedGroup;
     }
 
+    @Override
     public BasketballGroup findGroupByID(Long groupID) {
         return groupRepository.findById(groupID)
                 .orElseThrow(() -> new IllegalArgumentException("Group with id = " + groupID + " does not exist!"));
     }
 
+    @Override
     public BasketballGroup findGroupByUUID(String uuidStr) {
         UUID uuid = UUID.fromString(uuidStr);
         return groupRepository.findByUuid(uuid);
     }
 
+    @Override
     @Transactional
     public void updateGroupName(Long groupID, String newName) {
         BasketballGroup group = groupRepository.findById(groupID)
@@ -78,6 +83,7 @@ public class BasketballService {
         group.setName(newName);
     }
 
+    @Override
     @Transactional
     public void deleteGroup(long groupID) {
         BasketballGroup groupToBeDeleted = groupRepository.findById(groupID)
@@ -96,6 +102,7 @@ public class BasketballService {
 
     /* Member */
 
+    @Override
     @Transactional
     public BasketballMember createAndAddMemberToGroup(Long groupID, String memberNickname) {
         BasketballGroup group = groupRepository.findById(groupID)
@@ -117,6 +124,7 @@ public class BasketballService {
         return newMember;
     }
 
+    @Override
     @Transactional
     public void removeMemberFromGroup(Long memberID) {
         memberRepository.findById(memberID)
@@ -127,6 +135,7 @@ public class BasketballService {
         memberRepository.deleteById(memberID);
     }
 
+    @Override
     @Transactional
     public void joinGroupAsExistingMember(long userID, long memberID) {
         User user = userRepository.findById(userID)
@@ -142,6 +151,7 @@ public class BasketballService {
         member.setUser(user);
     }
 
+    @Override
     public BasketballMember joinGroupAsNewMember(long userID, long groupID) {
         User user = userRepository.findById(userID)
                 .orElseThrow(() -> {
@@ -165,6 +175,7 @@ public class BasketballService {
         return newMember;
     }
 
+    @Override
     @Transactional
     public void setRoleToAdmin(long memberID) {
         BasketballMember member = memberRepository.findById(memberID)
@@ -173,6 +184,7 @@ public class BasketballService {
         member.setRole(MemberRole.GROUP_ADMIN);
     }
 
+    @Override
     @Transactional
     public void setRoleToGameMaker(long memberID) {
         BasketballMember member = memberRepository.findById(memberID)
@@ -181,6 +193,7 @@ public class BasketballService {
         member.setRole(MemberRole.GAME_MAKER);
     }
 
+    @Override
     @Transactional
     public void setRoleToMember(long memberID) {
         BasketballMember member = memberRepository.findById(memberID)
@@ -191,6 +204,7 @@ public class BasketballService {
 
     /* Game */
 
+    @Override
     @Transactional
     public BasketballGame addNewGame(AddNewBBGameRequest request) {
 
@@ -248,6 +262,7 @@ public class BasketballService {
         return builder.toString();
     }
 
+    @Override
     public List<BBStats> getGameStats(Long gameID) {
         Optional<BasketballGame> game = gameRepository.findById(gameID);
         if (game.isEmpty()) {
@@ -256,6 +271,7 @@ public class BasketballService {
         return gameRepository.getGameStats(gameID);
     }
 
+    @Override
     @Transactional
     public void deleteGame(Long gameID) {
         BasketballGame game = gameRepository.findById(gameID)
