@@ -69,13 +69,11 @@ public class FootballService {
     }
 
     @Transactional
-    public FootballGroup updateGroupName(Long groupID, String newName) {
+    public void updateGroupName(Long groupID, String newName) {
         FootballGroup footballGroup = groupRepository.findById(groupID)
                 .orElseThrow(() -> new IllegalArgumentException("Group with id = " + groupID + " does not exist!"));
 
         footballGroup.setName(newName);
-
-        return footballGroup;
     }
 
     @Transactional
