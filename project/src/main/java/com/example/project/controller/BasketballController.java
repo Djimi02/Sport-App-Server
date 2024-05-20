@@ -22,34 +22,39 @@ import lombok.AllArgsConstructor;
 @RestController
 @RequestMapping("/basketball/")
 @AllArgsConstructor
-public class BasketballController {
+public class BasketballController implements SportController<BasketballGroup, BasketballMember, BasketballGame, BBStats, AddNewBBGameRequest> {
  
     private BasketballService service;
 
     /* GROUP */
 
     @GetMapping("/group/get/{id}")
+    @Override
     public BasketballGroup getGroupByID(@PathVariable(name = "id") Long groupID) {
         return service.findGroupByID(groupID);
     }
 
     @GetMapping("/group/get/uuid/{uuid}")
+    @Override
     public BasketballGroup findGroupByUUID(@PathVariable(name = "uuid") String uuidStr) {
         return service.findGroupByUUID(uuidStr);
     }
 
     @PostMapping("/group/save/{name}/{userid}")
+    @Override
     public BasketballGroup createGroup(@PathVariable(name = "name") String name,
             @PathVariable(name = "userid") Long userID) {
         return service.saveGroup(name, userID);
     }
 
     @PostMapping("/group/join/notnew/{userid}/{memberid}")
+    @Override
     public void joinGroupAsExistingMember(@PathVariable(name = "userid") long userID, @PathVariable(name = "memberid") long memberID) {
         service.joinGroupAsExistingMember(userID, memberID);
     }
 
     @PostMapping("/group/join/new/{userid}/{groupid}")
+    @Override
     public BasketballMember joinGroupAsNewMember(@PathVariable(name = "userid") long userID, @PathVariable(name = "groupid") long groupID) {
         BasketballMember member = service.joinGroupAsNewMember(userID, groupID);
         member.setGroup(null);
@@ -57,6 +62,7 @@ public class BasketballController {
     }
 
     @DeleteMapping("/group/delete/{id}")
+    @Override
     public void deleteGroup(@PathVariable(name = "id") Long groupID) {
         service.deleteGroup(groupID);
     }
@@ -64,6 +70,7 @@ public class BasketballController {
     /* Member */
 
     @PostMapping("/member/save/{groupid}/{name}")
+    @Override
     public BasketballMember createMember(@PathVariable(name = "groupid") Long groupID,
             @PathVariable(name = "name") String memberName) {
         BasketballMember output = service.createAndAddMemberToGroup(groupID, memberName);
@@ -72,21 +79,25 @@ public class BasketballController {
     }
 
     @DeleteMapping("/member/delete/{id}")
+    @Override
     public void removeMemberFromGroup(@PathVariable(name = "id") Long memberID) {
         service.removeMemberFromGroup(memberID);
     }
 
     @PostMapping("/member/role/admin/{id}")
+    @Override
     public void setRoleToAdmin(@PathVariable(name = "id") Long memberID) {
         service.setRoleToAdmin(memberID);
     }
 
     @PostMapping("/member/role/gamemaker/{id}")
+    @Override
     public void setRoleToGameMaker(@PathVariable(name = "id") Long memberID) {
         service.setRoleToGameMaker(memberID);
     }
 
     @PostMapping("/member/role/member/{id}")
+    @Override
     public void setRoleToMember(@PathVariable(name = "id") Long memberID) {
         service.setRoleToMember(memberID);
     }
@@ -94,11 +105,13 @@ public class BasketballController {
     /* Game */
 
     @GetMapping("/game/get/gamestats/{id}")
+    @Override
     public List<BBStats> getGameStats(@PathVariable(name = "id") Long gameID) {
         return service.getGameStats(gameID);
     }
 
     @PostMapping("/game/save")
+    @Override
     public BasketballGame addNewGame(@RequestBody AddNewBBGameRequest request) {
         BasketballGame output = service.addNewGame(request);
         output.setGroup(null);
@@ -106,6 +119,7 @@ public class BasketballController {
     }
 
     @DeleteMapping("/game/delete/{id}")
+    @Override
     public void deleteGame(@PathVariable(name = "id") Long gameID) {
         service.deleteGame(gameID);
     }
