@@ -1,4 +1,4 @@
-package com.example.project.service;
+package com.example.project.service.interfaces;
 
 import com.example.project.request.SignInRequest;
 import com.example.project.request.SignUpRequest;

@@ -1,4 +1,5 @@
-package com.example.project.service;
+package com.example.project.service.interfaces;
+
 
 import org.springframework.security.core.userdetails.UserDetails;
 

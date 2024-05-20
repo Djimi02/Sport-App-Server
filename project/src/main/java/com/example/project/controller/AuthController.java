@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.project.request.SignInRequest;
 import com.example.project.request.SignUpRequest;
 import com.example.project.response.JwtAuthenticationResponse;
-import com.example.project.service.AuthService;
+import com.example.project.service.interfaces.AuthService;
 
 import lombok.AllArgsConstructor;
 

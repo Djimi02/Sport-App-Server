@@ -10,8 +10,8 @@ import com.example.project.repository.UserRepository;
 import com.example.project.request.SignInRequest;
 import com.example.project.request.SignUpRequest;
 import com.example.project.response.JwtAuthenticationResponse;
-import com.example.project.service.AuthService;
-import com.example.project.service.JwtService;
+import com.example.project.service.interfaces.AuthService;
+import com.example.project.service.interfaces.JwtService;
 
 import lombok.AllArgsConstructor;
 
