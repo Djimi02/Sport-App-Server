@@ -24,89 +24,89 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class FootballController {
 
-    private FootballService footballGroupService;
+    private FootballService service;
 
     /* GROUP */
 
     @GetMapping("/group/get/{id}")
-    public FootballGroup getFootballGroupByID(@PathVariable(name = "id") Long groupID) {
-        return footballGroupService.findGroupByID(groupID);
+    public FootballGroup getGroupByID(@PathVariable(name = "id") Long groupID) {
+        return service.findGroupByID(groupID);
     }
 
     @GetMapping("/group/get/uuid/{uuid}")
     public FootballGroup findGroupByUUID(@PathVariable(name = "uuid") String uuidStr) {
-        return footballGroupService.findGroupByUUID(uuidStr);
+        return service.findGroupByUUID(uuidStr);
     }
 
     @PostMapping("/group/save/{name}/{userid}")
-    public FootballGroup createFootballGroup(@PathVariable(name = "name") String name,
+    public FootballGroup createGroup(@PathVariable(name = "name") String name,
             @PathVariable(name = "userid") Long userID) {
-        return footballGroupService.saveGroup(name, userID);
+        return service.saveGroup(name, userID);
     }
 
     @PostMapping("/group/join/notnew/{userid}/{memberid}")
     public void joinGroupAsExistingMember(@PathVariable(name = "userid") long userID, @PathVariable(name = "memberid") long memberID) {
-        footballGroupService.joinGroupAsExistingMember(userID, memberID);
+        service.joinGroupAsExistingMember(userID, memberID);
     }
 
     @PostMapping("/group/join/new/{userid}/{groupid}")
     public FootballMember joinGroupAsNewMember(@PathVariable(name = "userid") long userID, @PathVariable(name = "groupid") long groupID) {
-        FootballMember member = footballGroupService.joinGroupAsNewMember(userID, groupID);
+        FootballMember member = service.joinGroupAsNewMember(userID, groupID);
         member.setGroup(null);
         return member;
     }
 
     @DeleteMapping("/group/delete/{id}")
     public void deleteGroup(@PathVariable(name = "id") Long groupID) {
-        footballGroupService.deleteGroup(groupID);
+        service.deleteGroup(groupID);
     }
 
     /* Member */
 
     @PostMapping("/member/save/{groupid}/{name}")
-    public FootballMember createFootballMember(@PathVariable(name = "groupid") Long groupID,
+    public FootballMember createMember(@PathVariable(name = "groupid") Long groupID,
             @PathVariable(name = "name") String memberName) {
-        FootballMember output = footballGroupService.createAndAddMemberToGroup(groupID, memberName);
+        FootballMember output = service.createAndAddMemberToGroup(groupID, memberName);
         output.setGroup(null);
         return output;
     }
 
     @DeleteMapping("/member/delete/{id}")
     public void removeMemberFromGroup(@PathVariable(name = "id") Long memberID) {
-        footballGroupService.removeMemberFromGroup(memberID);
+        service.removeMemberFromGroup(memberID);
     }
 
     @PostMapping("/member/role/admin/{id}")
     public void setRoleToAdmin(@PathVariable(name = "id") Long memberID) {
-        footballGroupService.setRoleToAdmin(memberID);
+        service.setRoleToAdmin(memberID);
     }
 
     @PostMapping("/member/role/gamemaker/{id}")
     public void setRoleToGameMaker(@PathVariable(name = "id") Long memberID) {
-        footballGroupService.setRoleToGameMaker(memberID);
+        service.setRoleToGameMaker(memberID);
     }
 
     @PostMapping("/member/role/member/{id}")
     public void setRoleToMember(@PathVariable(name = "id") Long memberID) {
-        footballGroupService.setRoleToMember(memberID);
+        service.setRoleToMember(memberID);
     }
 
     /* Game */
 
     @GetMapping("/game/get/gamestats/{id}")
     public List<FBStats> getGameStats(@PathVariable(name = "id") Long gameID) {
-        return footballGroupService.getGameStats(gameID);
+        return service.getGameStats(gameID);
     }
 
     @PostMapping("/game/save")
     public FootballGame addNewGame(@RequestBody AddNewFBGameRequest request) {
-        FootballGame output = footballGroupService.addNewGame(request);
+        FootballGame output = service.addNewGame(request);
         output.setGroup(null);
         return output;
     }
 
     @DeleteMapping("/game/delete/{id}")
     public void deleteGame(@PathVariable(name = "id") Long gameID) {
-        footballGroupService.deleteGame(gameID);
+        service.deleteGame(gameID);
     }
 }
