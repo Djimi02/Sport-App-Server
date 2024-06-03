@@ -232,8 +232,9 @@ public class BasketballService implements SportService<BasketballGroup, Basketba
             dbMemberStats.setLoses(dbMemberStats.getLoses() + gameStats.getLoses());
 
             dbMemberStats.setPoints(dbMemberStats.getPoints() + gameStats.getPoints());
-            dbMemberStats.setBlocks(dbMemberStats.getBlocks() + gameStats.getBlocks());
             dbMemberStats.setNumberOfThreePoints(dbMemberStats.getNumberOfThreePoints() + gameStats.getNumberOfThreePoints());
+            dbMemberStats.setNumOfDunks(dbMemberStats.getNumOfDunks() + gameStats.getNumOfDunks());
+            dbMemberStats.setBlocks(dbMemberStats.getBlocks() + gameStats.getBlocks());
             dbMemberStats.setFouls(dbMemberStats.getFouls() + gameStats.getFouls());
 
             gameStats.setMember(dbMember);
@@ -299,10 +300,11 @@ public class BasketballService implements SportService<BasketballGroup, Basketba
             associatedGMemberStats.setDraws(associatedGMemberStats.getDraws() - gameStat.getDraws());
             associatedGMemberStats.setLoses(associatedGMemberStats.getLoses() - gameStat.getLoses());
             
-            associatedGMemberStats.setPoints(associatedGMemberStats.getPoints() - associatedGMemberStats.getPoints());
-            associatedGMemberStats.setBlocks(associatedGMemberStats.getBlocks() - associatedGMemberStats.getBlocks());
-            associatedGMemberStats.setNumberOfThreePoints(associatedGMemberStats.getNumberOfThreePoints() - associatedGMemberStats.getNumberOfThreePoints());
-            associatedGMemberStats.setFouls(associatedGMemberStats.getFouls() - associatedGMemberStats.getFouls());
+            associatedGMemberStats.setPoints(associatedGMemberStats.getPoints() - gameStat.getPoints());
+            associatedGMemberStats.setNumberOfThreePoints(associatedGMemberStats.getNumberOfThreePoints() - gameStat.getNumberOfThreePoints());
+            associatedGMemberStats.setNumOfDunks(associatedGMemberStats.getNumOfDunks() - gameStat.getNumOfDunks());
+            associatedGMemberStats.setBlocks(associatedGMemberStats.getBlocks() - gameStat.getBlocks());
+            associatedGMemberStats.setFouls(associatedGMemberStats.getFouls() - gameStat.getFouls());
         }
     }
 
